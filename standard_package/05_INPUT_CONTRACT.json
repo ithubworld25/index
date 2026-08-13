@@ -1,0 +1,48 @@
+{
+  "contract_version": "1.0.0",
+  "minimum_inputs": {
+    "fgos_plans": {
+      "min": 1,
+      "description": "КП/УП ФГОС или эквивалентный официальный план"
+    },
+    "joint_plans": {
+      "min": 1,
+      "description": "Стыковочный УП для каждой различающейся траектории или бизнес-роли"
+    },
+    "competency_matrices": {
+      "min": 1,
+      "description": "Матрица компетенций для каждой различающейся траектории или бизнес-роли"
+    }
+  },
+  "input_manifest_required": true,
+  "manifest_fields": [
+    "file_name",
+    "document_role",
+    "academic_year",
+    "specialty",
+    "direction",
+    "business_roles",
+    "version_status",
+    "source_priority",
+    "notes"
+  ],
+  "blocking_conditions_P0": [
+    "не определён учебный год визуализации",
+    "не определено соответствие файлов бизнес-ролям или веткам",
+    "отсутствует стыковочный УП, по которому должна строиться карта",
+    "не удаётся определить семестр или название значимой части дисциплин",
+    "конфликт источников меняет состав узлов и не разрешается приоритетом источников"
+  ],
+  "non_blocking_but_logged": [
+    "расхождение названия между стыковочным УП и матрицей",
+    "расхождение часов между стыковочным УП и матрицей",
+    "похожее, но не подтверждённое название",
+    "код отсутствует или используется неоднозначно",
+    "нет соответствия с ФГОС-контуром"
+  ],
+  "isolation": {
+    "current_chat_files_only": true,
+    "project_files_excluded_by_default": true,
+    "standard_archive_allowed_as_mechanics_only": true
+  }
+}
