@@ -1,0 +1,54 @@
+{
+  "notice": "DEMO ONLY. Never use as program data.",
+  "meta": {
+    "title": "Демонстрационная траектория",
+    "academic_year": "0000-0000",
+    "semesters": 2,
+    "roles_order": ["role_1", "role_2"],
+    "version": "demo"
+  },
+  "catalog": [
+    {
+      "id": "h1",
+      "code": "H1",
+      "name": "Демонстрационный hard",
+      "group": "internal_hard",
+      "color": "hsl(205 82% 55%)"
+    },
+    {
+      "id": "s1",
+      "code": "S1",
+      "name": "Демонстрационный soft",
+      "group": "soft",
+      "color": "hsl(330 80% 62%)"
+    }
+  ],
+  "roles": {
+    "role_1": {
+      "label": "БР 1",
+      "nodes": [
+        {
+          "id": "r1s1a",
+          "semester": 1,
+          "name": "Дисциплина A",
+          "hours": 32,
+          "competencies": {"h1": 2, "s1": 1},
+          "source_mode": "joint_plan"
+        }
+      ]
+    },
+    "role_2": {
+      "label": "БР 2",
+      "nodes": [
+        {
+          "id": "r2s1a",
+          "semester": 1,
+          "name": "Дисциплина A",
+          "hours": 32,
+          "competencies": {"h1": 2, "s1": 1},
+          "source_mode": "joint_plan"
+        }
+      ]
+    }
+  }
+}
