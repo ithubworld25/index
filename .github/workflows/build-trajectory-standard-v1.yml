@@ -15,6 +15,7 @@ jobs:
       - name: Validate and package standard
         run: |
           set -euo pipefail
+          mkdir -p standard/_build
           python3 standard/validate_standard.py | tee standard/_build/validation_result.json
 
       - name: Browser smoke tests
