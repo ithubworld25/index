@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "trajectory-visualization-data-v1",
+  "title": "Normalized educational trajectory dataset",
+  "type": "object",
+  "required": ["meta", "catalog", "groups", "roles", "rules", "source_errors"],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["title", "academic_year", "semesters", "roles_order", "version"],
+      "properties": {
+        "title": {"type": "string"},
+        "specialty_code": {"type": ["string", "null"]},
+        "specialty": {"type": "string"},
+        "direction": {"type": ["string", "null"]},
+        "academic_year": {"type": "string"},
+        "semesters": {"type": "integer", "minimum": 1},
+        "roles_order": {"type": "array", "items": {"type": "string"}},
+        "version": {"type": "string"},
+        "generated_at": {"type": "string"}
+      }
+    },
+    "catalog": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/competency"}
+    },
+    "groups": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/competency_group"}
+    },
+    "roles": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/role_trajectory"}
+    },
+    "rules": {"type": "object"},
+    "source_errors": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/issue"}
+    },
+    "issue_states": {"type": "object"},
+    "change_log": {"type": "array"},
+    "mapping_register": {"type": "array"}
+  },
+  "$defs": {
+    "competency": {
+      "type": "object",
+      "required": ["id", "code", "name", "group", "color"],
+      "properties": {
+        "id": {"type": "string"},
+        "code": {"type": "string"},
+        "name": {"type": "string"},
+        "group": {"type": "string"},
+        "color": {"type": "string"},
+        "aliases": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "competency_group": {
+      "type": "object",
+      "required": ["label", "competency_ids", "line_semantics"],
+      "properties": {
+        "label": {"type": "string"},
+        "competency_ids": {"type": "array", "items": {"type": "string"}},
+        "line_semantics": {"enum": ["inheritance", "assessment_places", "other"]},
+        "line_style": {"enum": ["solid", "dashed", "none"]}
+      }
+    },
+    "role_trajectory": {
+      "type": "object",
+      "required": ["id", "label", "nodes", "continuations"],
+      "properties": {
+        "id": {"type": "string"},
+        "label": {"type": "string"},
+        "full_name": {"type": ["string", "null"]},
+        "nodes": {"type": "array", "items": {"$ref": "#/$defs/discipline_realization"}},
+        "continuations": {"type": "array", "items": {"$ref": "#/$defs/continuation"}}
+      }
+    },
+    "discipline_realization": {
+      "type": "object",
+      "required": ["id", "semester", "name", "hours", "competencies", "source_mode"],
+      "properties": {
+        "id": {"type": "string"},
+        "canonical_id": {"type": ["string", "null"]},
+        "shared_key": {"type": ["string", "null"]},
+        "semester": {"type": "integer", "minimum": 1},
+        "course": {"type": "integer", "minimum": 1},
+        "name": {"type": "string"},
+        "code": {"type": ["string", "null"]},
+        "hours": {"type": "number", "minimum": 0},
+        "fgos_hours": {"type": ["number", "null"], "minimum": 0},
+        "competencies": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 1, "maximum": 4}
+        },
+        "source_mode": {"enum": ["joint_plan", "split_from_joint_plan", "matrix_unmapped", "other"]},
+        "used_by_roles": {"type": "array", "items": {"type": "string"}},
+        "zero_hours": {"type": "boolean"},
+        "physical_education_exception": {"type": "boolean"},
+        "source_refs": {"type": "object"}
+      }
+    },
+    "continuation": {
+      "type": "object",
+      "required": ["from", "to", "type", "source"],
+      "properties": {
+        "from": {"type": "string"},
+        "to": {"type": "string"},
+        "type": {"enum": ["continuation", "manual_continuation"]},
+        "source": {"type": "string"},
+        "confidence": {"type": "string"}
+      }
+    },
+    "issue": {
+      "type": "object",
+      "required": ["id", "rule", "severity", "status", "title", "summary", "roles"],
+      "properties": {
+        "id": {"type": "string"},
+        "rule": {"type": "string"},
+        "severity": {"enum": ["error", "warning", "info"]},
+        "status": {"enum": ["open", "warning", "fixed", "not_relevant"]},
+        "title": {"type": "string"},
+        "summary": {"type": "string"},
+        "semester": {"type": ["integer", "null"]},
+        "roles": {"type": "array", "items": {"type": "string"}},
+        "node_ids": {"type": "object"},
+        "current": {"type": "string"},
+        "expected": {"type": "string"},
+        "source_refs": {"type": "array"},
+        "action": {"type": "string"},
+        "comment": {"type": "string"},
+        "history": {"type": "array"}
+      }
+    }
+  }
+}
