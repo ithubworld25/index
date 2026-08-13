@@ -1,0 +1,31 @@
+{
+  "mapping_version": "1.0.0",
+  "entries": [
+    {
+      "mapping_id": "MAP-001",
+      "academic_year": "<YYYY-YYYY>",
+      "scope": {
+        "specialty": "<name>",
+        "direction": "<name_or_null>",
+        "business_roles": ["<role_id>"],
+        "semesters": [1]
+      },
+      "official": {
+        "code": "<fgos_code_or_null>",
+        "name": "<fgos_name>",
+        "source_ref": "<file/sheet/row>"
+      },
+      "internal": [
+        {
+          "name": "<joint_plan_name>",
+          "source_ref": "<file/sheet/row>"
+        }
+      ],
+      "mapping_type": "exact|alias|split|merge|continuation|manual",
+      "status": "proposed|confirmed|rejected",
+      "approved_by": "<person_or_role>",
+      "approved_at": "<ISO-8601_or_null>",
+      "comment": ""
+    }
+  ]
+}
