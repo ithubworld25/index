@@ -1,0 +1,13 @@
+[
+  {"pair":["light.text","light.panel"],"ratio":16.27,"minimum":4.5,"pass":true},
+  {"pair":["light.muted","light.panel"],"ratio":6.31,"minimum":4.5,"pass":true},
+  {"pair":["light.subtle","light.panel"],"ratio":4.97,"minimum":4.5,"pass":true},
+  {"pair":["dark.text","dark.panel"],"ratio":17.06,"minimum":4.5,"pass":true},
+  {"pair":["dark.muted","dark.panel"],"ratio":12.02,"minimum":4.5,"pass":true},
+  {"pair":["dark.subtle","dark.panel"],"ratio":8.45,"minimum":4.5,"pass":true},
+  {"pair":["dark.placeholder","dark.input_bg"],"ratio":8.39,"minimum":4.5,"pass":true},
+  {"pair":["dark.danger_text","dark.danger_bg"],"ratio":8.29,"minimum":4.5,"pass":true},
+  {"pair":["dark.warning_text","dark.warning_bg"],"ratio":9.61,"minimum":4.5,"pass":true},
+  {"pair":["dark.normalized_text","dark.normalized_bg"],"ratio":8.4,"minimum":4.5,"pass":true},
+  {"pair":["dark.border","dark.bg"],"ratio":4.14,"minimum":3.0,"pass":true}
+]

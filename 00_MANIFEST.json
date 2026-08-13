@@ -1,0 +1,16 @@
+{
+  "standard_id": "trajectory-visualization-standard",
+  "version": "1.0.0",
+  "language": "ru",
+  "purpose": "Единый стандарт воспроизводимого создания автономных визуализаций образовательных траекторий",
+  "subject_data_included": false,
+  "short_launch_prompt": "03_SHORT_LAUNCH_PROMPT_RU.txt",
+  "full_generation_prompt": "02_FULL_GENERATION_PROMPT_RU.md",
+  "input_contract": "05_INPUT_CONTRACT.json",
+  "validation_rules": "07_VALIDATION_RULES.json",
+  "data_schema": "08_DATA_SCHEMA.json",
+  "ui_behavior": "09_UI_BEHAVIOR.md",
+  "theme_contract": "10_THEME_AND_CONTRAST.json",
+  "final_package_contract": "11_FINAL_PACKAGE_CONTRACT.json",
+  "required_read_order": ["00_MANIFEST.json","01_STANDARD_SPEC.json","05_INPUT_CONTRACT.json","06_SOURCE_PRIORITY_AND_MAPPING.md","07_VALIDATION_RULES.json","08_DATA_SCHEMA.json","09_UI_BEHAVIOR.md","10_THEME_AND_CONTRAST.json","11_FINAL_PACKAGE_CONTRACT.json"]
+}

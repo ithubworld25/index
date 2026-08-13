@@ -1,0 +1,7 @@
+Verified build artifact (GitHub Actions):
+a2a4cf797aac23a6a11e85f68a02d246f71106614524dd0839fc96ea114532ed
+
+Verified source-package ZIP generated during CI before stable-branch publication:
+d0af92388fd770e9f63639a599f9595b016c23c921849d9a7f42915aae9906dc
+
+Note: the downloadable GitHub branch archive is generated on request and may have a different binary SHA-256 because GitHub adds a top-level directory and archive metadata. Validate package contents against 00_MANIFEST.json and VERIFICATION_PROTOCOL.txt.

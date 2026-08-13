@@ -1,0 +1,13 @@
+STANDARD PACKAGE VERIFICATION PROTOCOL
+========================================
+PASS: package STANDARD_TRAJECTORY_VISUALIZATION_v1.0
+PASS: no subject-specific program data
+PASS: required files exist and are non-empty
+PASS: all JSON files parsed
+PASS: inline JavaScript passed node --check
+PASS: UI reference has no external script or fetch dependency
+PASS: Chrome light-theme smoke test
+PASS: Chrome dark-theme smoke test
+PASS: group-selection and card-dimming smoke test
+PASS: all declared light/dark contrast pairs meet their thresholds
+PASS: stable GitHub branch archive created outside the temporary code-interpreter session
