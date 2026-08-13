@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru" data-runtime-ready="0" data-self-test="pending" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UI reference · образовательная траектория</title>
+<style>
+:root{
+  --bg:#F3F5F8;--panel:#FFFFFF;--panel2:#F8FAFC;--ink:#172033;
+  --muted:#536174;--subtle:#667085;--line:#94A3B8;--input:#FFFFFF;
+  --accent:#2563EB;--danger:#991B1B;--danger-bg:#FEE2E2;
+  --warn:#854D0E;--warn-bg:#FEF3C7;--norm:#475569;--norm-bg:#E2E8F0;
+  --shadow:0 8px 24px rgba(16,24,40,.10);
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif
+}
+html[data-theme="dark"]{
+  --bg:#070B14;--panel:#0F172A;--panel2:#111C30;--ink:#F8FAFC;
+  --muted:#CBD5E1;--subtle:#A8B3C7;--line:#64748B;--input:#111827;
+  --accent:#60A5FA;--danger:#FCA5A5;--danger-bg:#3F151B;
+  --warn:#FCD34D;--warn-bg:#3A2A0A;--norm:#E2E8F0;--norm-bg:#334155;
+  --shadow:0 8px 28px rgba(0,0,0,.35)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:13px/1.45 Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+.top{display:flex;gap:10px;align-items:center;padding:12px 16px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.title{font-weight:800}.sub{font-size:11px;color:var(--muted)}.spacer{flex:1}
+button,select{font:inherit;border:1px solid var(--line);background:var(--input);color:var(--ink);border-radius:8px;padding:7px 9px}
+button:focus-visible,select:focus-visible{outline:3px solid color-mix(in srgb,var(--accent) 45%,transparent);outline-offset:2px}
+.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.filters{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:8px;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line)}
+.group{border:1px solid var(--line);background:var(--panel2);padding:9px;border-radius:10px}
+.group-head{display:flex;justify-content:space-between;gap:6px;font-weight:750}.mini{padding:3px 6px;font-size:10px}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 360px;min-height:620px}
+.map{display:grid;grid-template-columns:repeat(4,260px);gap:12px;overflow:auto;padding:14px}
+.semester{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px}.semester h2{font-size:13px;margin:0 0 9px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px;margin-bottom:8px;box-shadow:0 2px 8px rgba(0,0,0,.06);transition:.15s}
+.card.dim{opacity:.43}.card h3{font-size:12px;margin:0 46px 4px 0}.meta{font-size:10px;color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}.chip{font-size:9px;font-weight:750;border:1px solid currentColor;border-radius:999px;padding:2px 5px}.chip.soft{border-style:dashed}
+.count{position:absolute;top:7px;border-radius:999px;min-width:20px;height:20px;display:grid;place-items:center;font-weight:800;font-size:10px}
+.count.active-issue{right:31px;background:var(--danger-bg);color:var(--danger)}.count.normalized{right:7px;background:var(--norm-bg);color:var(--norm)}
+.side{background:var(--panel);border-left:1px solid var(--line);padding:14px}.side h2{font-size:16px;margin:0 0 5px}.side p,.side li{color:var(--muted)}
+.issue{border:1px solid var(--line);border-left:4px solid var(--danger);border-radius:9px;padding:9px;margin-top:8px;background:var(--panel2)}
+.issue.normalized{border-left-color:var(--norm);background:var(--norm-bg)}.issue strong{display:block}.issue small{color:var(--subtle)}
+.diagnostic{border:1px solid var(--line);padding:8px;border-radius:8px;margin-top:8px}.diagnostic label{display:block;color:var(--subtle);font-size:10px;text-transform:uppercase;font-weight:750}
+.legend{padding:8px 16px;color:var(--muted);border-top:1px solid var(--line);background:var(--panel)}
+@media(max-width:1000px){.filters{grid-template-columns:repeat(2,minmax(180px,1fr))}.workspace{grid-template-columns:1fr}.side{border-left:0;border-top:1px solid var(--line)}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div><div class="title">Визуализация образовательной траектории</div><div class="sub">нейтральный UI reference · без предметных данных</div></div>
+  <div class="spacer"></div>
+  <button class="active">БР 1</button><button>БР 2</button>
+  <select id="theme" aria-label="Тема">
+    <option value="system">Системная тема</option>
+    <option value="light">Светлая тема</option>
+    <option value="dark">Тёмная тема</option>
+  </select>
+</header>
+<section class="filters">
+  <div class="group"><div class="group-head"><span>Internal hard</span><span><button class="mini select-group" data-group="hard">Показать все</button> <button class="mini clear-group">Выключить</button></span></div></div>
+  <div class="group"><div class="group-head"><span>Soft Skills</span><span><button class="mini select-group" data-group="soft">Показать все</button> <button class="mini clear-group">Выключить</button></span></div></div>
+  <div class="group"><div class="group-head"><span>ОК</span><span><button class="mini select-group" data-group="ok">Показать все</button> <button class="mini clear-group">Выключить</button></span></div></div>
+  <div class="group"><div class="group-head"><span>ПК</span><span><button class="mini select-group" data-group="pk">Показать все</button> <button class="mini clear-group">Выключить</button></span></div></div>
+</section>
+<div class="workspace">
+  <main class="map">
+    <section class="semester">
+      <h2>1 семестр</h2>
+      <article class="card" data-groups="hard soft ok">
+        <span class="count active-issue" title="Активные ошибки">2</span><span class="count normalized" title="Нормализованные">1</span>
+        <h3>Дисциплина A</h3><div class="meta">код · 32 ч.</div>
+        <div class="chips"><span class="chip" data-group="hard" style="color:hsl(205 82% 48%)">H1 · 2</span><span class="chip soft" data-group="soft" style="color:hsl(330 74% 50%)">S1 · 1</span><span class="chip" data-group="ok" style="color:hsl(45 78% 38%)">ОК 01</span></div>
+      </article>
+      <article class="card" data-groups="pk"><h3>Дисциплина B</h3><div class="meta">код · 48 ч.</div><div class="chips"><span class="chip" data-group="pk" style="color:hsl(214 76% 47%)">ПК 1.1</span></div></article>
+    </section>
+    <section class="semester"><h2>2 семестр</h2><article class="card" data-groups="hard soft"><h3>Дисциплина C</h3><div class="meta">код · 46 ч.</div><div class="chips"><span class="chip" data-group="hard" style="color:hsl(205 82% 48%)">H1 · 3</span><span class="chip soft" data-group="soft" style="color:hsl(330 74% 50%)">S1 · 2</span></div></article></section>
+    <section class="semester"><h2>3 семестр</h2></section><section class="semester"><h2>4 семестр</h2></section>
+  </main>
+  <aside class="side">
+    <h2>Дисциплина A</h2><p>Выбранные компетенции и источники.</p>
+    <div class="issue"><strong>Открытая ошибка</strong><small>кликабельная диагностика · красный статус</small><div class="diagnostic"><label>Текущее состояние</label>0 hard</div></div>
+    <div class="issue normalized"><strong>Исправлена</strong><small>серый статус · история сохранена</small></div>
+  </aside>
+</div>
+<footer class="legend">Без активного выбора показываются все метки. После выбора группы — только выбранная группа; остальные карточки остаются и приглушаются.</footer>
+<script>
+const root=document.documentElement;
+const theme=document.getElementById('theme');
+const savedTheme=localStorage.getItem('trajectory-standard-theme')||'light';
+function applyTheme(value){
+  const resolved=value==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):value;
+  root.dataset.theme=resolved;
+  localStorage.setItem('trajectory-standard-theme',value);
+}
+theme.value=savedTheme;applyTheme(savedTheme);theme.addEventListener('change',()=>applyTheme(theme.value));
+function showGroup(group){
+  document.querySelectorAll('.chip').forEach(chip=>{chip.hidden=chip.dataset.group!==group});
+  document.querySelectorAll('.card').forEach(card=>{card.classList.toggle('dim',!card.querySelector(`.chip[data-group="${group}"]`))});
+}
+function clearGroups(){document.querySelectorAll('.chip').forEach(chip=>{chip.hidden=false});document.querySelectorAll('.card').forEach(card=>card.classList.remove('dim'))}
+document.querySelectorAll('.select-group').forEach(button=>button.addEventListener('click',()=>showGroup(button.dataset.group)));
+document.querySelectorAll('.clear-group').forEach(button=>button.addEventListener('click',clearGroups));
+function selfTest(){
+  const ok=Boolean(document.querySelector('.count.normalized'))&&Boolean(document.querySelector('.issue.normalized'))&&Boolean(document.querySelector('.chip.soft'))&&typeof showGroup==='function';
+  root.dataset.selfTest=ok?'ok':'failed';root.dataset.runtimeReady='1';return{ok,theme:root.dataset.theme};
+}
+window.__RUN_SELF_TEST__=selfTest;document.addEventListener('DOMContentLoaded',selfTest);
+</script>
+</body>
+</html>
