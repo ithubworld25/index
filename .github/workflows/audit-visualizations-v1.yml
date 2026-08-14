@@ -1,0 +1,78 @@
+name: audit-visualizations-v1
+on:
+  push:
+    branches:
+      - tmp-functional-audit-ib-v04-oibas-v101-20260814
+permissions:
+  contents: read
+jobs:
+  audit:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download candidate archives
+        run: |
+          set -euxo pipefail
+          mkdir -p audit/in audit/out
+          curl -L --fail --retry 2 -o audit/in/ib.zip 'https://drive.usercontent.google.com/download?id=1CLGLPz_MsIGRyQFXbqpDvL8VsU8ehbtT&export=download&confirm=t'
+          curl -L --fail --retry 2 -o audit/in/oibas.zip 'https://drive.usercontent.google.com/download?id=1bGf25Qz59j1Y2PI5BqPNkidhag_95K-T&export=download&confirm=t'
+          file audit/in/*.zip
+          unzip -t audit/in/ib.zip
+          unzip -t audit/in/oibas.zip
+          mkdir -p audit/out/ib audit/out/oibas
+          unzip -q audit/in/ib.zip -d audit/out/ib
+          unzip -q audit/in/oibas.zip -d audit/out/oibas
+          find audit/out -maxdepth 2 -type f -printf '%p %s bytes\n' | sort
+      - name: Build static audit evidence
+        run: |
+          set -euxo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,re,hashlib
+          root=Path('audit/out')
+          terms={
+            'theme':['data-theme','theme','dark','light'],
+            'group_filter':['selectedCompetencies','activeCompetencies','toggleGroup','group'],
+            'individual_filter':['type="checkbox"','competency'],
+            'issue_registry':['issue','error','problem','validation'],
+            'issue_status':['resolved','fixed','not_relevant','irrelevant','status'],
+            'comment_required':['comment','Комментар'],
+            'discipline_focus':['selectedRealization','selectedDiscipline','focus'],
+            'session':['localStorage','saveSession','loadSession'],
+            'editing':['editMode','editing','applyScope'],
+            'export':['export','downloadJson','Blob'],
+          }
+          report={}
+          for name in ['ib','oibas']:
+            htmls=list((root/name).rglob('START.html'))
+            if not htmls:
+              htmls=list((root/name).rglob('*.html'))
+            if not htmls: raise SystemExit(f'No HTML in {name}')
+            p=max(htmls,key=lambda x:x.stat().st_size)
+            s=p.read_text(encoding='utf-8',errors='replace')
+            report[name]={
+              'path':str(p),'size':p.stat().st_size,'sha256':hashlib.sha256(p.read_bytes()).hexdigest(),
+              'functions':sorted(set(re.findall(r'function\s+([A-Za-z_$][\w$]*)\s*\(',s))),
+              'ids':sorted(set(re.findall(r'id=["\']([^"\']+)',s))),
+              'markers':{k:{t:s.lower().count(t.lower()) for t in vals} for k,vals in terms.items()},
+              'button_texts':sorted(set(re.sub(r'<[^>]+>',' ',x).strip() for x in re.findall(r'<button\b[^>]*>(.*?)</button>',s,flags=re.S|re.I) if re.sub(r'<[^>]+>',' ',x).strip())),
+            }
+            (Path('audit')/f'{name}_START.html').write_text(s,encoding='utf-8')
+          Path('audit/STATIC_EVIDENCE.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
+          print(json.dumps({k:{'size':v['size'],'functions':len(v['functions']),'ids':len(v['ids'])} for k,v in report.items()},ensure_ascii=False,indent=2))
+          PY
+      - name: Browser smoke screenshots and DOM
+        run: |
+          set -euxo pipefail
+          google-chrome --version
+          for n in ib oibas; do
+            timeout 60s google-chrome --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --virtual-time-budget=6000 --dump-dom "file://${GITHUB_WORKSPACE}/audit/${n}_START.html" > "audit/${n}_dom.html"
+            timeout 60s google-chrome --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --window-size=1920,1080 --screenshot="audit/${n}.png" "file://${GITHUB_WORKSPACE}/audit/${n}_START.html"
+          done
+          wc -c audit/*_dom.html audit/*.png
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FUNCTIONAL_AUDIT_EVIDENCE
+          path: audit
+          retention-days: 7
+          compression-level: 6
