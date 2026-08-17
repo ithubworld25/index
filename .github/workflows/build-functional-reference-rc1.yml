@@ -1,0 +1,161 @@
+name: build-functional-reference-rc1
+on:
+  push:
+    branches:
+      - trajectory-functional-reference-v0.9-rc1
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble candidate package
+        run: |
+          set -euo pipefail
+          rm -rf build_rc1
+          mkdir -p build_rc1/package build_rc1/test
+          cp reference_candidate/* build_rc1/package/
+          cp reference_candidate/START_REFERENCE.html build_rc1/package/START.html
+          rm build_rc1/package/START_REFERENCE.html
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          p=Path('build_rc1/package/START.html')
+          s=p.read_text(encoding='utf-8')
+          # Correct one representative continuation and make editor validation user-visible.
+          s=s.replace("['s5-foreign','s2-foreign']","['s2-foreign','s5-foreign']")
+          s=s.replace("byId('applyEditBtn').onclick=applyEdit;","byId('applyEditBtn').onclick=()=>{try{applyEdit()}catch(e){toast(e.message)}};")
+          # Type list is a legend; the separate technical-P2 switch is the functional filter.
+          pattern=r"<div class='issue-filters'>\$\{Object\.keys\(TYPE_META\)\.map\(type=>`<label><input type='checkbox' data-type-filter='\$\{type\}' \$\{type==='import_technical'&&!state\.showTechnical\?'':'checked'\}> \$\{TYPE_META\[type\]\.icon\} \$\{TYPE_META\[type\]\.label\}</label>`\)\.join\(''\)\}</div>"
+          replacement="<div class='issue-filters'>${Object.keys(TYPE_META).map(type=>`<span class='type-pill'>${TYPE_META[type].icon} ${TYPE_META[type].label}</span>`).join('')}</div>"
+          s,n=re.subn(pattern,replacement,s)
+          if n!=1: raise SystemExit(f'issue legend patch count={n}')
+          p.write_text(s,encoding='utf-8')
+          PY
+          test -s build_rc1/package/START.html
+      - name: Static validation
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,re
+          package=Path('build_rc1/package')
+          for p in package.glob('*.json'):
+              json.loads(p.read_text(encoding='utf-8'))
+          s=(package/'START.html').read_text(encoding='utf-8')
+          if '<script src=' in s: raise SystemExit('external script found')
+          if re.search(r'\bfetch\s*\(',s): raise SystemExit('fetch call found')
+          scripts=re.findall(r'<script(?:\s[^>]*)?>(.*?)</script>',s,flags=re.S|re.I)
+          if not scripts: raise SystemExit('inline script not found')
+          Path('build_rc1/test/app.js').write_text(scripts[-1],encoding='utf-8')
+          required=['activeCompIds','computeFocusEdges','buildHardIssues','buildSoftIssues','targetsForScope','sessionCompatible','runConformanceTests']
+          missing=[x for x in required if x not in s]
+          if missing: raise SystemExit('missing required mechanics: '+','.join(missing))
+          print({'html_size':len(s),'json_files':len(list(package.glob('*.json'))),'required_markers':'ok'})
+          PY
+          node --check build_rc1/test/app.js
+      - name: Build light dark and scenario fixtures
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path('build_rc1/package/START.html').read_text(encoding='utf-8')
+          marker="state.theme=localStorage.getItem('trajectory-reference-theme')||'system';"
+          if marker not in source: raise SystemExit('theme marker not found')
+          Path('build_rc1/test/light.html').write_text(source.replace(marker,"state.theme='light';",1),encoding='utf-8')
+          Path('build_rc1/test/dark.html').write_text(source.replace(marker,"state.theme='dark';",1),encoding='utf-8')
+          inject=r'''
+          document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{
+            let ok=true;
+            try{
+              byId('clearAllComps').click();
+              document.querySelector("[data-group-on='hard']").click();
+              document.querySelector("[data-group-on='soft_skills']").click();
+              ok=ok&&state.activeCompIds.has('H-NET')&&state.activeCompIds.has('S-CRIT');
+              document.querySelector("[data-group-off='hard']").click();
+              ok=ok&&!state.activeCompIds.has('H-NET')&&state.activeCompIds.has('S-CRIT');
+              state.activeCompIds.clear();renderAll();
+              const node=nodeByKey('cyber','s3-networks');
+              state.focusedNodeId=node.id;renderAll();
+              ok=ok&&computeFocusEdges(node,new Set()).length>0;
+              state.activeCompIds=new Set(['H-NET']);renderAll();
+              const filtered=computeFocusEdges(node,state.activeCompIds);
+              ok=ok&&filtered.length>0&&filtered.every(x=>x.compId==='H-NET');
+              focusIssue('SRC-001');
+              ok=ok&&state.selectedIssueId==='SRC-001'&&state.roleId==='cyber';
+              ok=ok&&!statusChangeAllowed('fixed','');
+              ok=ok&&targetsForScope(nodeByKey('cyber','s1-rus'),'shared_realization').length===2;
+              const schemas=[sessionPayload().session_schema,snapshotPayload().schema,'trajectory-change-log-v1',getIssueExport('SRC-001').schema];
+              ok=ok&&new Set(schemas).size===4;
+            }catch(e){console.error(e);ok=false}
+            document.documentElement.dataset.uiScenario=ok?'ok':'failed';
+          },1200));
+          '''
+          anchor="window.__RUN_CONFORMANCE_TESTS__=runConformanceTests;"
+          if anchor not in source: raise SystemExit('scenario injection marker not found')
+          Path('build_rc1/test/scenario.html').write_text(source.replace(anchor,inject+anchor,1),encoding='utf-8')
+          PY
+      - name: Browser smoke and behavioral tests
+        run: |
+          set -euo pipefail
+          google-chrome --version | tee build_rc1/test/chrome_version.txt
+          for mode in light dark scenario; do
+            mkdir -p "build_rc1/test/profile-$mode"
+            timeout 70s google-chrome --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --user-data-dir="${GITHUB_WORKSPACE}/build_rc1/test/profile-$mode" --virtual-time-budget=10000 --dump-dom "file://${GITHUB_WORKSPACE}/build_rc1/test/$mode.html" > "build_rc1/test/$mode-dom.html"
+            grep -q 'data-runtime-ready="1"' "build_rc1/test/$mode-dom.html"
+            grep -q 'data-self-test="ok"' "build_rc1/test/$mode-dom.html"
+          done
+          grep -q 'data-theme="light"' build_rc1/test/light-dom.html
+          grep -q 'data-theme="dark"' build_rc1/test/dark-dom.html
+          grep -q 'data-ui-scenario="ok"' build_rc1/test/scenario-dom.html
+          timeout 70s google-chrome --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --window-size=1920,1080 --screenshot=build_rc1/test/light.png "file://${GITHUB_WORKSPACE}/build_rc1/test/light.html"
+          timeout 70s google-chrome --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --window-size=1920,1080 --screenshot=build_rc1/test/dark.png "file://${GITHUB_WORKSPACE}/build_rc1/test/dark.html"
+      - name: Package and manifest
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,zipfile,datetime
+          package=Path('build_rc1/package')
+          test=Path('build_rc1/test')
+          def sha(p): return hashlib.sha256(p.read_bytes()).hexdigest()
+          protocol=[
+            'TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc1',
+            f'created_at={datetime.datetime.now(datetime.timezone.utc).isoformat()}',
+            'PASS: autonomous START.html; no external scripts or fetch calls',
+            'PASS: inline JavaScript syntax (node --check)',
+            'PASS: all JSON contracts parse',
+            'PASS: Chrome light-theme smoke test',
+            'PASS: Chrome dark-theme smoke test',
+            'PASS: built-in conformance tests',
+            'PASS: behavioral scenario for cumulative filters, F-02 focus, issue navigation, comment guard, shared editing and distinct exports',
+            'NOTE: candidate contains representative data only and requires team acceptance before v1.0'
+          ]
+          (package/'VERIFICATION_PROTOCOL.txt').write_text('\n'.join(protocol)+'\n',encoding='utf-8')
+          (package/'PREVIEW_LIGHT.png').write_bytes((test/'light.png').read_bytes())
+          (package/'PREVIEW_DARK.png').write_bytes((test/'dark.png').read_bytes())
+          manifest={'package':'TRAJECTORY_FUNCTIONAL_REFERENCE','version':'0.9.0-rc1','created_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'start_file':'START.html','candidate_only':True,'files':[]}
+          for p in sorted(x for x in package.iterdir() if x.is_file() and x.name!='PACKAGE_MANIFEST.json'):
+              manifest['files'].append({'name':p.name,'size':p.stat().st_size,'sha256':sha(p)})
+          (package/'PACKAGE_MANIFEST.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          zpath=Path('build_rc1/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc1.zip')
+          with zipfile.ZipFile(zpath,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for p in sorted(package.iterdir()):
+                  if p.is_file(): z.write(p,p.name)
+          with zipfile.ZipFile(zpath) as z:
+              assert z.testzip() is None
+              names=z.namelist()
+              assert 'START.html' in names and all('/' not in n.strip('/') for n in names)
+          (Path('build_rc1')/'PACKAGE_SHA256.txt').write_text(f'{sha(zpath)}  {zpath.name}\n',encoding='utf-8')
+          print(json.dumps({'zip':str(zpath),'size':zpath.stat().st_size,'sha256':sha(zpath),'files':len(names)},ensure_ascii=False))
+          PY
+          unzip -t build_rc1/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc1.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc1
+          path: |
+            build_rc1/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc1.zip
+            build_rc1/PACKAGE_SHA256.txt
+          retention-days: 14
+          compression-level: 0

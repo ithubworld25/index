@@ -1,0 +1,106 @@
+{
+  "contract_id": "trajectory-functional-contract",
+  "version": "0.9.0-rc1",
+  "candidate_only": true,
+  "immutable_core": {
+    "locked_after_v1": [
+      "active competency set model",
+      "group and individual filtering behavior",
+      "card filtering and dimming behavior",
+      "discipline focus algorithm",
+      "competency and continuation line semantics",
+      "issue lifecycle and navigation",
+      "editing scope behavior",
+      "session schemas",
+      "export schemas",
+      "theme switching mechanism",
+      "right panel structure"
+    ],
+    "allowed_dynamic_blocks": [
+      "program profile",
+      "program metadata",
+      "competency catalog",
+      "competency groups and semantics",
+      "business roles",
+      "semesters",
+      "discipline realizations",
+      "continuation registry",
+      "source registry",
+      "validation profile",
+      "UI labels"
+    ]
+  },
+  "profile_schema": {
+    "required": ["id","roles","semesters","groups","validation","ui_labels"],
+    "group_required": ["id","label","relation_semantics","line_style","inheritance"],
+    "supported_relation_semantics": ["inheritance","assessment_place","reference"],
+    "supported_line_styles": ["solid","dashed","none"]
+  },
+  "catalog_schema": {
+    "required": ["id","code","name","group_id","hue","saturation"],
+    "stable_identity": "id",
+    "color_rule": "same id keeps hue across roles and semesters; dark theme changes lightness only"
+  },
+  "active_selection": {
+    "storage": "Set<competency_id>",
+    "no_selection": "show all assigned chips; discipline focus uses all shared competencies",
+    "with_selection": "show only selected assigned chips; focus uses intersection with active set",
+    "role_switch": "preserve",
+    "discipline_focus": "preserve"
+  },
+  "line_engine": {
+    "focus": {
+      "same_semester_links": false,
+      "direction": "chronological_left_to_right",
+      "one_line_per_competency": true,
+      "parallel_offsets": true,
+      "external_card_anchors": true,
+      "width_from_coefficient": true
+    },
+    "global_selection": {
+      "algorithm": "nearest_next_node_per_consecutive_semester_with_presence",
+      "all_pairs_forbidden": true
+    },
+    "continuation": {
+      "independent_layer": true,
+      "style": "neutral_gray_dashed"
+    }
+  },
+  "issue_engine": {
+    "types": ["methodological","source_mismatch","mapping_ambiguity","import_technical"],
+    "priorities": ["P0","P1","P2"],
+    "statuses": ["open","fixed","not_relevant","normalized"],
+    "context_fields": ["primary_node_ids","existing_node_ids","candidate_node_ids","related_node_ids"],
+    "manual_close_requires_comment": true,
+    "automatic_fix_after_revalidation": true,
+    "automatic_reopen_on_recurrence": true,
+    "single_issue_id_across_views": true,
+    "technical_p2_visible_by_default": false
+  },
+  "editing": {
+    "scopes": ["current_realization","shared_realization","all_canonical_realizations"],
+    "preview_target_count_before_apply": true,
+    "apply_requires_explicit_action": true,
+    "revalidate_after_apply": true,
+    "undo_last_competency_edit": true,
+    "direct_excel_writeback": false
+  },
+  "session": {
+    "schema": "trajectory-session-v2",
+    "compatibility_keys": ["functional_core_version","program_profile_id","catalog_hash","source_manifest_hash"],
+    "autosave": "localStorage",
+    "portable_json": true
+  },
+  "exports": {
+    "session": "trajectory-session-v2",
+    "snapshot": "trajectory-snapshot-v1",
+    "change_log": "trajectory-change-log-v1",
+    "single_issue": "trajectory-single-issue-v1"
+  },
+  "theme": {
+    "modes": ["system","light","dark"],
+    "normal_text_min_contrast": 4.5,
+    "large_text_and_ui_min_contrast": 3.0,
+    "color_not_only_signal": true
+  }
+}

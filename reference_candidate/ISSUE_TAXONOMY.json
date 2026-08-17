@@ -1,0 +1,46 @@
+{
+  "taxonomy_id": "trajectory-issue-taxonomy",
+  "version": "0.9.0-rc1",
+  "panel_label_default": "Проблемы и расхождения",
+  "dimensions": {
+    "type": {
+      "methodological": {"label":"Нарушение методического правила","icon":"!","active_color":"red","examples":["no required hard competency","soft assessment deficit","coefficient outside profile range"]},
+      "source_mismatch": {"label":"Расхождение источников","icon":"≠","active_color":"amber","examples":["different title","different hours","different semester or academic year"]},
+      "mapping_ambiguity": {"label":"Неоднозначность сопоставления","icon":"?","active_color":"purple","examples":["two mapping candidates","unconfirmed split or merge","ambiguous continuation"]},
+      "import_technical": {"label":"Техническая проблема импорта","icon":"⚙","active_color":"indigo","examples":["required anchor missing","table shape changed","formula not calculated"]}
+    },
+    "priority": {
+      "P0": {"meaning":"blocking","behavior":"do not build final visualization before decision"},
+      "P1": {"meaning":"significant but nonblocking","behavior":"use source priority and keep issue open"},
+      "P2": {"meaning":"informational or normalized","behavior":"show in registry; technical P2 hidden by default"}
+    },
+    "status": {
+      "open": {"visual":"type color","requires_comment":false},
+      "fixed": {"visual":"gray","requires_comment_when_manual":true},
+      "not_relevant": {"visual":"gray","requires_comment":true},
+      "normalized": {"visual":"gray","requires_comment":true}
+    }
+  },
+  "issue_schema": {
+    "required": ["issue_id","type","priority","status","rule_id","short_message","full_description","current_state","expected_state","required_action","role_ids","semester_ids","source_refs"],
+    "context_arrays": ["primary_node_ids","existing_node_ids","candidate_node_ids","related_node_ids"],
+    "history": ["at","from","to","comment","method"]
+  },
+  "navigation": {
+    "primary_node_ids": "direct violation point",
+    "existing_node_ids": "already assigned assessment places or valid related nodes",
+    "candidate_node_ids": "possible places for consideration; not counted as errors on cards",
+    "related_node_ids": "supporting context"
+  },
+  "card_counters": {
+    "active": "separate count by active problem type or compact aggregated active marker",
+    "normalized": "gray count",
+    "candidate_nodes": "must not increment card issue count"
+  },
+  "lifecycle": {
+    "manual_close_requires_comment": true,
+    "automatic_fixed_when_rule_passes": true,
+    "automatic_reopen_when_rule_fails_again": true,
+    "history_never_deleted": true
+  }
+}
