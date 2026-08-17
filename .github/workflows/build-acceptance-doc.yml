@@ -15,6 +15,7 @@ jobs:
       - name: Build and validate Word protocol
         run: |
           set -euo pipefail
+          mkdir -p acceptance_doc/out
           python3 acceptance_doc/build_docx.py | tee acceptance_doc/out/BUILD_RESULT.txt
           test -s acceptance_doc/out/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.docx
           test -s acceptance_doc/out/PROTOKOL_SHA256.txt
