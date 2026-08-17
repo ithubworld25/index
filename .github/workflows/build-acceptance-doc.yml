@@ -26,9 +26,46 @@ jobs:
           with zipfile.ZipFile(p) as z:
               assert z.testzip() is None
               assert 'word/document.xml' in z.namelist()
-          print({'docx_size':p.stat().st_size,'zip_integrity':'PASS'})
+          print({'docx_size':p.stat().st_size,'docx_integrity':'PASS'})
           PY
-      - name: Publish stable release asset
+      - name: Create and validate stable ZIP package
+        run: |
+          set -euo pipefail
+          cat > acceptance_doc/out/README_FIRST.txt <<'EOF'
+          Пакет протокола командной приёмки функционального эталона v0.9-rc1.
+
+          1. Откройте файл PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.docx.
+          2. Передайте его РБР, методисту и техническому специалисту.
+          3. В таблице отметьте PASS / FAIL / N/A, приоритет P0 / P1 / P2 и комментарий.
+          4. Известный дефект FOCUS-03 уже отмечен как FAIL / P0.
+          EOF
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib, zipfile
+          out=Path('acceptance_doc/out')
+          name='PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.zip'
+          zpath=out/name
+          members=[
+              out/'README_FIRST.txt',
+              out/'PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.docx',
+              out/'PROTOKOL_SHA256.txt',
+              out/'BUILD_RESULT.txt',
+          ]
+          with zipfile.ZipFile(zpath,'w',zipfile.ZIP_DEFLATED,compresslevel=9) as z:
+              for p in members:
+                  assert p.is_file() and p.stat().st_size>0, p
+                  z.write(p,p.name)
+          with zipfile.ZipFile(zpath) as z:
+              assert z.testzip() is None
+              names=z.namelist()
+              assert 'PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.docx' in names
+              assert all('/' not in n.strip('/') and '..' not in n for n in names)
+          digest=hashlib.sha256(zpath.read_bytes()).hexdigest()
+          (out/'PACKAGE_SHA256.txt').write_text(f'{digest}  {name}\n',encoding='utf-8')
+          print({'zip_size':zpath.stat().st_size,'zip_sha256':digest,'zip_integrity':'PASS','members':len(names)})
+          PY
+          unzip -t acceptance_doc/out/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.zip
+      - name: Publish stable release assets
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -36,14 +73,18 @@ jobs:
           TAG='trajectory-functional-reference-v0.9-rc1'
           gh release upload "$TAG" \
             acceptance_doc/out/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.docx \
+            acceptance_doc/out/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.zip \
             acceptance_doc/out/PROTOKOL_SHA256.txt \
+            acceptance_doc/out/PACKAGE_SHA256.txt \
             --clobber
       - uses: actions/upload-artifact@v4
         with:
           name: PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1
           path: |
+            acceptance_doc/out/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.zip
             acceptance_doc/out/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc1.docx
             acceptance_doc/out/PROTOKOL_SHA256.txt
+            acceptance_doc/out/PACKAGE_SHA256.txt
             acceptance_doc/out/BUILD_RESULT.txt
           retention-days: 14
           compression-level: 0
