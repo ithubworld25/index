@@ -1,4 +1,5 @@
 name: TEMP-build-functional-reference-rc2
+# Second push: explicitly trigger the already-installed temporary workflow.
 on:
   push:
     branches:
@@ -60,7 +61,6 @@ jobs:
           STATUS: ${{ job.status }}
         run: |
           set -euo pipefail
-          RC2_SHA="$(git rev-parse HEAD)"
           python3 - <<'PY'
           from pathlib import Path
           import datetime,json,os,subprocess
