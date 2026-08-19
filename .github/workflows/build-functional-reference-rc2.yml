@@ -1,0 +1,49 @@
+name: build-functional-reference-rc2
+on:
+  push:
+    branches:
+      - trajectory-functional-reference-v0.9-rc2
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build, validate and package RC2
+        run: python3 reference_candidate_rc2/build_rc2.py
+      - name: Publish stable RC2 prerelease assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG='trajectory-functional-reference-v0.9-rc2'
+          ASSETS=(
+            build_rc2/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip
+            build_rc2/PACKAGE_SHA256.txt
+            build_rc2/START_SHA256.txt
+            build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md
+            build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md
+            build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json
+          )
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+          else
+            gh release create "$TAG" "${ASSETS[@]}" \
+              --target "${GITHUB_SHA}" \
+              --title 'TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc2' \
+              --notes 'Кандидат функционального эталона после командной проверки rc1. Содержит отчёт автоматической проверки. Не является финальным v1.0.' \
+              --prerelease
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2
+          path: |
+            build_rc2/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip
+            build_rc2/PACKAGE_SHA256.txt
+            build_rc2/START_SHA256.txt
+            build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md
+            build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md
+            build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json
+          retention-days: 14
+          compression-level: 0
