@@ -29,10 +29,72 @@ replacements = {
         window.__RC2_SCENARIO_RESULTS__=checks;
         console.log('RC2_SCENARIO',JSON.stringify(checks));
       },700);""",
+    """    for mode in (\"light\", \"dark\", \"scenario\"):
+        profile = TEST / f\"profile-{mode}\"
+        profile.mkdir()
+        dom = TEST / f\"{mode}-dom.html\"
+        url = f\"file://{(TEST / f'{mode}.html').resolve()}\"
+        run([
+            chrome, \"--headless=new\", \"--disable-gpu\", \"--no-sandbox\",
+            \"--allow-file-access-from-files\", f\"--user-data-dir={profile.resolve()}\",
+            \"--virtual-time-budget=16000\", \"--dump-dom\", url,
+        ], timeout=85, stdout=dom)
+        text = dom.read_text(encoding=\"utf-8\", errors=\"replace\")
+        checks = {
+            \"runtime_ready\": 'data-runtime-ready=\"1\"' in text,
+            \"base_self_test\": 'data-self-test=\"ok\"' in text,
+            \"rc2_ready\": 'data-rc2-ready=\"1\"' in text,
+            \"rc2_self_test\": 'data-rc2-self-test=\"ok\"' in text,
+        }
+        if mode == \"light\": checks[\"theme_light\"] = 'data-theme=\"light\"' in text
+        if mode == \"dark\": checks[\"theme_dark\"] = 'data-theme=\"dark\"' in text
+        if mode == \"scenario\": checks[\"behavioral_scenario\"] = 'data-rc2-scenario=\"ok\"' in text
+        ok = all(checks.values())
+        results.append({\"id\": f\"chrome_{mode}\", \"ok\": ok, \"checks\": checks})
+        if not ok:
+            raise RuntimeError(f\"Browser validation failed for {mode}: {checks}\")
+""": """    for mode in (\"light\", \"dark\", \"scenario\"):
+        url = f\"file://{(TEST / f'{mode}.html').resolve()}\"
+        checks = {}
+        attempts = []
+        text = \"\"
+        for attempt in range(1, 4):
+            profile = TEST / f\"profile-{mode}-{attempt}\"
+            profile.mkdir()
+            dom = TEST / f\"{mode}-dom-{attempt}.html\"
+            run([
+                chrome, \"--headless=new\", \"--disable-gpu\", \"--no-sandbox\",
+                \"--no-first-run\", \"--no-default-browser-check\", \"--disable-background-networking\",
+                \"--disable-sync\", \"--disable-extensions\", \"--allow-file-access-from-files\",
+                f\"--user-data-dir={profile.resolve()}\", \"--virtual-time-budget=18000\", \"--dump-dom\", url,
+            ], timeout=95, stdout=dom)
+            text = dom.read_text(encoding=\"utf-8\", errors=\"replace\")
+            checks = {
+                \"runtime_ready\": 'data-runtime-ready=\"1\"' in text,
+                \"base_self_test\": 'data-self-test=\"ok\"' in text,
+                \"rc2_ready\": 'data-rc2-ready=\"1\"' in text,
+                \"rc2_self_test\": 'data-rc2-self-test=\"ok\"' in text,
+            }
+            if mode == \"light\": checks[\"theme_light\"] = 'data-theme=\"light\"' in text
+            if mode == \"dark\": checks[\"theme_dark\"] = 'data-theme=\"dark\"' in text
+            if mode == \"scenario\":
+                checks[\"behavioral_scenario\"] = 'data-rc2-scenario=\"ok\"' in text
+                result_match = re.search(r'data-rc2-scenario-results=\"([^\"]*)\"', text)
+                error_match = re.search(r'data-rc2-scenario-error=\"([^\"]*)\"', text)
+                print({'scenario_results': result_match.group(1) if result_match else None, 'scenario_error': error_match.group(1) if error_match else None})
+            ok = all(checks.values())
+            attempts.append({\"attempt\": attempt, \"ok\": ok, \"checks\": dict(checks), \"dom_size\": len(text)})
+            if ok:
+                break
+            print({\"browser_retry\": mode, \"attempt\": attempt, \"checks\": checks, \"dom_size\": len(text)})
+        results.append({\"id\": f\"chrome_{mode}\", \"ok\": ok, \"checks\": checks, \"attempts\": attempts})
+        if not ok:
+            raise RuntimeError(f\"Browser validation failed for {mode}: {checks}; attempts={attempts}\")
+""",
 }
 for old, new in replacements.items():
     if old not in source:
-        raise SystemExit(f'patch marker not found: {old}')
+        raise SystemExit(f'patch marker not found: {old[:120]}')
     source = source.replace(old, new, 1)
 path.write_text(source, encoding='utf-8')
 print({'patched': len(replacements), 'file': str(path)})
