@@ -1,2 +1,2 @@
 TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc2
-Final verified build trigger after semester issue synchronization.
+Trigger isolated final verification workflow after scenario synchronization.
