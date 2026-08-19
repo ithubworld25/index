@@ -6,6 +6,7 @@ replacements = {
     "set('issue_expands_in_place',Boolean(document.querySelector(`#issue-item-${safeId('MAP-001')}.expanded .issue-body`)));": "const issueItemId='MAP-001'.replace(/[^a-zA-Z0-9_-]+/g,'_');\n      set('issue_expands_in_place',Boolean(document.querySelector(`#issue-item-${issueItemId}.expanded .issue-body`)));",
     "set('common_discipline_two_roles',sharedRoleIds(shared).length===2);": "const rc2api=window.__TRAJECTORY_REFERENCE_RC2__;\n      set('common_discipline_two_roles',rc2api.sharedRoleIds(shared).length===2);",
     "set('status_payload_compatible',issueStatusPayloadCompatible(issueStatusPayload()));": "set('status_payload_compatible',rc2api.issueStatusPayloadCompatible(rc2api.issueStatusPayload()));",
+    "if mode == \"scenario\": checks[\"behavioral_scenario\"] = 'data-rc2-scenario=\"ok\"' in text\n        ok = all(checks.values())": "if mode == \"scenario\":\n            checks[\"behavioral_scenario\"] = 'data-rc2-scenario=\"ok\"' in text\n            result_match = re.search(r'data-rc2-scenario-results=\"([^\"]*)\"', text)\n            error_match = re.search(r'data-rc2-scenario-error=\"([^\"]*)\"', text)\n            print({'scenario_results': result_match.group(1) if result_match else None, 'scenario_error': error_match.group(1) if error_match else None})\n        ok = all(checks.values())",
 }
 for old, new in replacements.items():
     if old not in source:
