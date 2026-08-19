@@ -1,0 +1,37 @@
+/* TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc2 */
+.discipline.related-focus{outline:3px solid var(--related-color,var(--accent));box-shadow:0 0 0 5px color-mix(in srgb,var(--related-color,var(--accent)) 18%,transparent);opacity:1!important;z-index:5}
+.discipline.focus-dim{opacity:.16}
+.discipline.issue-context-dim{opacity:.15}
+.discipline.issue-primary,.discipline.issue-existing,.discipline.issue-candidate,.discipline.issue-related{opacity:1!important}
+.shared-badge{display:inline-flex;border:1px solid var(--accent);color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,var(--panel));border-radius:999px;padding:2px 5px;font-size:8px;font-weight:900}
+.sem-head-row{display:flex;justify-content:space-between;gap:6px;align-items:center}
+.sem-issue-badge{display:inline-flex;min-width:20px;height:20px;align-items:center;justify-content:center;border-radius:999px;background:var(--danger-bg);color:var(--danger);font-size:9px;font-weight:900;padding:0 5px}
+.semester.sem-issue{outline:3px solid var(--danger)}
+.semester.sem-issue.source_mismatch{outline-color:var(--warning)}
+.semester.sem-issue.mapping_ambiguity{outline-color:var(--mapping)}
+.issue-card.rc2-item{display:block;width:100%;padding:0;overflow:hidden;text-align:left}
+.issue-card.rc2-item.expanded{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 22%,transparent)}
+.issue-card.rc2-item .issue-header{width:100%;border:0;border-radius:0;background:transparent;color:var(--text);padding:9px;text-align:left}
+.issue-card.rc2-item .issue-header:hover{background:var(--panel-alt)}
+.issue-card.rc2-item .issue-context{display:block;color:var(--muted);font-size:9px;margin-top:3px}
+.issue-card.rc2-item .viewed-mark{font-size:8px;color:var(--success);font-weight:850;margin-left:5px}
+.issue-card.rc2-item .issue-body{border-top:1px solid var(--border);padding:9px;background:var(--panel-alt)}
+.status-pill.fixed_external{color:var(--normalized);background:var(--normalized-bg)}
+.rc2-notice{border:1px solid var(--warning);background:var(--warning-bg);color:var(--warning);border-radius:9px;padding:8px;font-size:9px;margin:8px 0}
+.rc2-status-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.rc2-status-row button{font-size:9px;padding:5px 7px}
+.rc2-action-button{font-size:9px;padding:5px 7px}
+.rc2-hidden{display:none!important}
+.rc2-toolbar-note{color:var(--muted);font-size:9px}
+.rc2-comp-mode{border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 12%,var(--panel));border-radius:9px;padding:8px;color:var(--text);font-size:9px;margin:8px 0}
+.rc2-common-block{border:1px solid var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--panel));border-radius:9px;padding:8px;margin:8px 0}
+.rc2-common-block strong{display:block;margin-bottom:4px}
+.rc2-accordion-list{display:flex;flex-direction:column;gap:7px}
+.rc2-issue-summary{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px}
+.rc2-context-title{font-size:9px;color:var(--muted);font-weight:700}
+.rc2-type-legend{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px}
+.rc2-sem-context{font-size:9px;color:var(--muted)}
+.rc2-status-info{font-size:9px;color:var(--muted);line-height:1.5}
+.rc2-focus-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.rc2-focus-actions button{font-size:9px;padding:5px 7px}
+.line-competency{opacity:.94}
