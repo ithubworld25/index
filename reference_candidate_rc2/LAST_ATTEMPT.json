@@ -2,8 +2,8 @@
   "package": "TRAJECTORY_FUNCTIONAL_REFERENCE",
   "version": "0.9.0-rc2",
   "status": "failure",
-  "recorded_at": "2026-08-19T16:17:55.421644+00:00",
-  "workflow_run_id": "32275079659",
-  "commit_sha": "c47581554500d0138a5c28146f69376880c4fa4d",
-  "workflow_url": "https://github.com/ithubworld25/index/actions/runs/32275079659"
+  "recorded_at": "2026-08-19T16:18:42.697995+00:00",
+  "workflow_run_id": "32275156668",
+  "commit_sha": "dc6b9d947914fff7313a5f3291beb6ff72fd0c0b",
+  "workflow_url": "https://github.com/ithubworld25/index/actions/runs/32275156668"
 }
