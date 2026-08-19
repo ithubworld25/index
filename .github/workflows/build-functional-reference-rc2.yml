@@ -14,7 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build, validate and package RC2
-        run: python3 reference_candidate_rc2/build_rc2.py
+        run: |
+          python3 reference_candidate_rc2/patch_builder.py
+          python3 reference_candidate_rc2/build_rc2.py
       - name: Publish stable RC2 prerelease assets
         env:
           GH_TOKEN: ${{ github.token }}
@@ -83,8 +85,7 @@ jobs:
                 'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/ОТЧЕТ_ПРОВЕРКИ_RC2.md',
                 'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json',
               })
-          output=Path('reference_candidate_rc2/LAST_ATTEMPT.json')
-          output.write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          Path('reference_candidate_rc2/LAST_ATTEMPT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           if status == 'success':
               Path('reference_candidate_rc2/LAST_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           print(json.dumps(result,ensure_ascii=False))
