@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - trajectory-functional-reference-v0.9-rc2
+    paths-ignore:
+      - reference_candidate_rc2/LAST_BUILD.json
 permissions:
   contents: write
 jobs:
@@ -35,6 +37,40 @@ jobs:
               --notes 'Кандидат функционального эталона после командной проверки rc1. Содержит отчёт автоматической проверки. Не является финальным v1.0.' \
               --prerelease
           fi
+      - name: Record successful build metadata
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import datetime, json
+          zip_name='TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip'
+          package_sha=Path('build_rc2/PACKAGE_SHA256.txt').read_text(encoding='utf-8').split()[0]
+          start_sha=Path('build_rc2/START_SHA256.txt').read_text(encoding='utf-8').split()[0]
+          result={
+            'package':'TRAJECTORY_FUNCTIONAL_REFERENCE',
+            'version':'0.9.0-rc2',
+            'status':'success',
+            'built_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'workflow_run_id':'${{ github.run_id }}',
+            'commit_sha':'${{ github.sha }}',
+            'zip_name':zip_name,
+            'zip_size':Path('build_rc2/'+zip_name).stat().st_size,
+            'zip_sha256':package_sha,
+            'start_sha256':start_sha,
+            'release_url':'https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v0.9-rc2',
+            'download_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/'+zip_name,
+            'manual_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/GITHUB_CONNECTION_MANUAL_RU.md',
+            'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/ОТЧЕТ_ПРОВЕРКИ_RC2.md',
+            'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json',
+          }
+          Path('reference_candidate_rc2/LAST_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reference_candidate_rc2/LAST_BUILD.json
+          git commit -m 'Record successful RC2 build [skip ci]'
+          git push origin HEAD:trajectory-functional-reference-v0.9-rc2
       - uses: actions/upload-artifact@v4
         with:
           name: TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2
