@@ -1,2 +1,2 @@
 TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc2
-Triggered after workflow installation.
+Final verified build trigger after semester issue synchronization.
