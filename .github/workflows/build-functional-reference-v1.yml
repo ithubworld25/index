@@ -1,0 +1,106 @@
+name: build-functional-reference-v1
+on:
+  push:
+    branches:
+      - trajectory-functional-reference-v1.0
+    paths-ignore:
+      - reference_v1/FINAL_BUILD.json
+      - reference_v1/FINAL_ATTEMPT.json
+permissions:
+  contents: write
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install DOCX dependency
+        run: python3 -m pip install --disable-pip-version-check python-docx==1.2.0
+      - name: Build and verify functional reference v1.0
+        run: python3 reference_v1/build_v1.py
+      - name: Publish final release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG='trajectory-functional-reference-v1.0'
+          ASSETS=(
+            build_v1/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip
+            build_v1/PACKAGE_SHA256.txt
+            build_v1/START_SHA256.txt
+            build_v1/package/ACCEPTANCE_RECORD_v1.0.docx
+            build_v1/package/ACCEPTANCE_RECORD_v1.0.md
+            build_v1/package/VERIFICATION_REPORT_v1.0.md
+            build_v1/package/AUTOTEST_RESULTS_v1.0.json
+            build_v1/package/FUNCTIONAL_REFERENCE_MANIFEST_v1.0.json
+          )
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+            gh release edit "$TAG" --title 'TRAJECTORY_FUNCTIONAL_REFERENCE v1.0' --notes 'Принятый функциональный эталон визуализации образовательной траектории. Зафиксирован после полного PASS целевого протокола RC3. Изменение механики требует новой версии эталона.' --latest
+          else
+            gh release create "$TAG" "${ASSETS[@]}" \
+              --target "${GITHUB_SHA}" \
+              --title 'TRAJECTORY_FUNCTIONAL_REFERENCE v1.0' \
+              --notes 'Принятый функциональный эталон визуализации образовательной траектории. Зафиксирован после полного PASS целевого протокола RC3. Изменение механики требует новой версии эталона.' \
+              --latest
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0
+          path: |
+            build_v1/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip
+            build_v1/PACKAGE_SHA256.txt
+            build_v1/START_SHA256.txt
+            build_v1/package/ACCEPTANCE_RECORD_v1.0.docx
+            build_v1/package/ACCEPTANCE_RECORD_v1.0.md
+            build_v1/package/VERIFICATION_REPORT_v1.0.md
+            build_v1/package/AUTOTEST_RESULTS_v1.0.json
+            build_v1/package/FUNCTIONAL_REFERENCE_MANIFEST_v1.0.json
+          retention-days: 30
+          compression-level: 0
+      - name: Record final build result
+        if: always()
+        env:
+          STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import datetime,json,os
+          status=os.environ['STATUS']
+          name='TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip'
+          result={
+            'package':'TRAJECTORY_FUNCTIONAL_REFERENCE',
+            'version':'1.0.0',
+            'status':status,
+            'recorded_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'workflow_run_id':'${{ github.run_id }}',
+            'commit_sha':'${{ github.sha }}',
+            'workflow_url':'https://github.com/ithubworld25/index/actions/runs/${{ github.run_id }}',
+          }
+          if status=='success':
+            result.update({
+              'zip_name':name,
+              'zip_size':Path('build_v1/'+name).stat().st_size,
+              'zip_sha256':Path('build_v1/PACKAGE_SHA256.txt').read_text().split()[0],
+              'start_sha256':Path('build_v1/START_SHA256.txt').read_text().split()[0],
+              'release_url':'https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v1.0',
+              'download_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/'+name,
+              'acceptance_docx_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/ACCEPTANCE_RECORD_v1.0.docx',
+              'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/VERIFICATION_REPORT_v1.0.md',
+              'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/AUTOTEST_RESULTS_v1.0.json',
+              'manifest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/FUNCTIONAL_REFERENCE_MANIFEST_v1.0.json',
+            })
+          Path('reference_v1').mkdir(exist_ok=True)
+          Path('reference_v1/FINAL_ATTEMPT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          if status=='success':
+              Path('reference_v1/FINAL_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reference_v1/FINAL_ATTEMPT.json
+          if [ "$STATUS" = success ]; then git add reference_v1/FINAL_BUILD.json; fi
+          git commit -m "Record functional reference v1.0 build: $STATUS [skip ci]"
+          git push origin HEAD:refs/heads/trajectory-functional-reference-v1.0
