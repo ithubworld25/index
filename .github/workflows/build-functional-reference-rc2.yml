@@ -1,100 +1,10 @@
-name: build-functional-reference-rc2
+name: build-functional-reference-rc2-legacy
 on:
-  push:
-    branches:
-      - trajectory-functional-reference-v0.9-rc2
-    paths-ignore:
-      - reference_candidate_rc2/LAST_BUILD.json
-      - reference_candidate_rc2/LAST_ATTEMPT.json
+  workflow_dispatch:
 permissions:
-  contents: write
+  contents: read
 jobs:
-  build:
+  notice:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Build, validate and package RC2
-        run: |
-          python3 reference_candidate_rc2/patch_builder.py
-          python3 reference_candidate_rc2/build_rc2.py
-      - name: Publish stable RC2 prerelease assets
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          TAG='trajectory-functional-reference-v0.9-rc2'
-          ASSETS=(
-            build_rc2/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip
-            build_rc2/PACKAGE_SHA256.txt
-            build_rc2/START_SHA256.txt
-            build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md
-            build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md
-            build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json
-          )
-          if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "${ASSETS[@]}" --clobber
-          else
-            gh release create "$TAG" "${ASSETS[@]}" \
-              --target "${GITHUB_SHA}" \
-              --title 'TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc2' \
-              --notes 'Кандидат функционального эталона после командной проверки rc1. Содержит отчёт автоматической проверки. Не является финальным v1.0.' \
-              --prerelease
-          fi
-      - uses: actions/upload-artifact@v4
-        with:
-          name: TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2
-          path: |
-            build_rc2/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip
-            build_rc2/PACKAGE_SHA256.txt
-            build_rc2/START_SHA256.txt
-            build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md
-            build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md
-            build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json
-          retention-days: 14
-          compression-level: 0
-      - name: Record build outcome
-        if: always()
-        run: |
-          set -euo pipefail
-          STATUS='${{ job.status }}'
-          python3 - <<'PY'
-          from pathlib import Path
-          import datetime, json, os
-          status=os.environ['STATUS']
-          zip_name='TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip'
-          result={
-            'package':'TRAJECTORY_FUNCTIONAL_REFERENCE',
-            'version':'0.9.0-rc2',
-            'status':status,
-            'recorded_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
-            'workflow_run_id':'${{ github.run_id }}',
-            'commit_sha':'${{ github.sha }}',
-            'workflow_url':'https://github.com/ithubworld25/index/actions/runs/${{ github.run_id }}',
-          }
-          if status == 'success':
-              package_sha=Path('build_rc2/PACKAGE_SHA256.txt').read_text(encoding='utf-8').split()[0]
-              start_sha=Path('build_rc2/START_SHA256.txt').read_text(encoding='utf-8').split()[0]
-              result.update({
-                'zip_name':zip_name,
-                'zip_size':Path('build_rc2/'+zip_name).stat().st_size,
-                'zip_sha256':package_sha,
-                'start_sha256':start_sha,
-                'release_url':'https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v0.9-rc2',
-                'download_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/'+zip_name,
-                'manual_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/GITHUB_CONNECTION_MANUAL_RU.md',
-                'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/ОТЧЕТ_ПРОВЕРКИ_RC2.md',
-                'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json',
-              })
-          Path('reference_candidate_rc2/LAST_ATTEMPT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          if status == 'success':
-              Path('reference_candidate_rc2/LAST_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          print(json.dumps(result,ensure_ascii=False))
-          PY
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reference_candidate_rc2/LAST_ATTEMPT.json
-          if [ "$STATUS" = success ]; then git add reference_candidate_rc2/LAST_BUILD.json; fi
-          git commit -m "Record RC2 build outcome: $STATUS [skip ci]"
-          git push origin HEAD:trajectory-functional-reference-v0.9-rc2
-        env:
-          STATUS: ${{ job.status }}
+      - run: echo 'Legacy RC2 workflow disabled. Use build-functional-reference-rc2-final.'
