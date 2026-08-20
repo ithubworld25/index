@@ -1,0 +1,110 @@
+{
+  "version": "1.0.0",
+  "coefficients": {
+    "allowed": [1, 2, 3, 4],
+    "zero_semantics": "competency_not_assigned",
+    "aggregation": "not_summed",
+    "scope": "discipline_realization"
+  },
+  "rules": [
+    {
+      "id": "HARD_REQUIRED_PER_DISCIPLINE",
+      "default_enabled": true,
+      "severity": "error",
+      "logic": "Каждая дисциплина с положительными часами должна иметь минимум одну компетенцию из группы internal_hard",
+      "minimum": 1,
+      "exceptions": ["zero_hours", "physical_education"],
+      "configurable_group": true
+    },
+    {
+      "id": "SOFT_MINIMUM_ASSESSMENT_PLACEMENTS",
+      "default_enabled": true,
+      "severity": "error",
+      "logic": "Каждый Soft Skill должен оцениваться минимум в трёх разных дисциплинах каждого проверяемого семестра",
+      "minimum_disciplines": 3,
+      "default_checked_semesters": [1, 2, 3, 4, 5, 6],
+      "default_excluded_courses": [4],
+      "counting": "one_discipline_once_if_coefficient_1_to_4",
+      "exclude_zero_hours": true,
+      "physical_education": "count_if_positive_hours_and_soft_explicitly_assigned"
+    },
+    {
+      "id": "COEFFICIENT_RANGE",
+      "default_enabled": true,
+      "severity": "error",
+      "logic": "Коэффициент назначенной компетенции — целое число от 1 до 4"
+    },
+    {
+      "id": "MATRIX_ROW_WITHOUT_UP_NODE",
+      "default_enabled": true,
+      "severity": "warning",
+      "logic": "Строка матрицы не привязана к узлу стыковочного УП"
+    },
+    {
+      "id": "UP_NODE_WITHOUT_MATRIX_COMPETENCIES",
+      "default_enabled": true,
+      "severity": "warning",
+      "logic": "Узел стыковочного УП не имеет привязанной строки матрицы компетенций"
+    },
+    {
+      "id": "SOURCE_NAME_MISMATCH",
+      "default_enabled": true,
+      "severity": "warning",
+      "logic": "На карте используется название стыковочного УП; матричное название сохраняется для исправления"
+    },
+    {
+      "id": "SOURCE_HOURS_MISMATCH",
+      "default_enabled": true,
+      "severity": "warning",
+      "logic": "На карте используются фактические часы стыковочного УП; матричные часы сохраняются в диагностике"
+    },
+    {
+      "id": "AMBIGUOUS_CONTINUATION",
+      "default_enabled": true,
+      "severity": "warning",
+      "logic": "Связь продолжения по ФГОС или словарю имеет несколько кандидатов и требует подтверждения"
+    }
+  ],
+  "issue_statuses": {
+    "open": {
+      "label": "Открыта",
+      "color": "red",
+      "active": true
+    },
+    "warning": {
+      "label": "Предупреждение",
+      "color": "yellow",
+      "active": true
+    },
+    "fixed": {
+      "label": "Исправлена",
+      "color": "gray",
+      "active": false
+    },
+    "not_relevant": {
+      "label": "Не актуальна",
+      "color": "gray",
+      "active": false,
+      "comment_required": true
+    }
+  },
+  "issue_contract": {
+    "required_fields": [
+      "id",
+      "rule",
+      "severity",
+      "status",
+      "title",
+      "summary",
+      "current",
+      "expected",
+      "source_refs",
+      "roles",
+      "semester",
+      "action"
+    ],
+    "manual_close_requires_comment": true,
+    "automatic_fixed_when_rule_passes": true,
+    "history_required": true
+  }
+}
