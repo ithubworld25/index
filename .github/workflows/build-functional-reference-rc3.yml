@@ -1,0 +1,101 @@
+name: build-functional-reference-rc3
+on:
+  push:
+    branches:
+      - trajectory-functional-reference-v0.9-rc3
+    paths-ignore:
+      - reference_candidate_rc3/FINAL_BUILD.json
+      - reference_candidate_rc3/FINAL_ATTEMPT.json
+permissions:
+  contents: write
+jobs:
+  verify-and-publish:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install DOCX dependency
+        run: python3 -m pip install --disable-pip-version-check python-docx==1.2.0
+      - name: Build and verify RC3
+        run: python3 reference_candidate_rc3/build_rc3.py
+      - name: Publish stable RC3 prerelease assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          TAG='trajectory-functional-reference-v0.9-rc3'
+          ASSETS=(
+            build_rc3/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc3.zip
+            build_rc3/PACKAGE_SHA256.txt
+            build_rc3/START_SHA256.txt
+            build_rc3/package/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc3.docx
+            build_rc3/package/VERIFICATION_REPORT_RC3.md
+            build_rc3/package/AUTOTEST_RESULTS_RC3.json
+            build_rc3/package/TEAM_ACCEPTANCE_SCENARIOS_RC3.md
+          )
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+          else
+            gh release create "$TAG" "${ASSETS[@]}" \
+              --target "${GITHUB_SHA}" \
+              --title 'TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc3' \
+              --notes 'Малый кандидат после решения методиста по FOCUS-05: дисциплины одного семестра подсвечиваются без линий. Содержит автоматический отчёт и целевой Word-протокол. Не является финальным v1.0.' \
+              --prerelease
+          fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc3
+          path: |
+            build_rc3/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc3.zip
+            build_rc3/PACKAGE_SHA256.txt
+            build_rc3/START_SHA256.txt
+            build_rc3/package/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc3.docx
+            build_rc3/package/VERIFICATION_REPORT_RC3.md
+            build_rc3/package/AUTOTEST_RESULTS_RC3.json
+            build_rc3/package/TEAM_ACCEPTANCE_SCENARIOS_RC3.md
+          retention-days: 14
+          compression-level: 0
+      - name: Record final result
+        if: always()
+        env:
+          STATUS: ${{ job.status }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import datetime,json,os
+          status=os.environ['STATUS']
+          name='TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc3.zip'
+          result={
+            'package':'TRAJECTORY_FUNCTIONAL_REFERENCE',
+            'version':'0.9.0-rc3',
+            'status':status,
+            'recorded_at':datetime.datetime.now(datetime.timezone.utc).isoformat(),
+            'workflow_run_id':'${{ github.run_id }}',
+            'commit_sha':'${{ github.sha }}',
+            'workflow_url':'https://github.com/ithubworld25/index/actions/runs/${{ github.run_id }}',
+          }
+          if status=='success':
+            result.update({
+              'zip_name':name,
+              'zip_size':Path('build_rc3/'+name).stat().st_size,
+              'zip_sha256':Path('build_rc3/PACKAGE_SHA256.txt').read_text().split()[0],
+              'start_sha256':Path('build_rc3/START_SHA256.txt').read_text().split()[0],
+              'release_url':'https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v0.9-rc3',
+              'download_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/'+name,
+              'protocol_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc3.docx',
+              'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/VERIFICATION_REPORT_RC3.md',
+              'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/AUTOTEST_RESULTS_RC3.json',
+            })
+          Path('reference_candidate_rc3/FINAL_ATTEMPT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          if status=='success':
+            Path('reference_candidate_rc3/FINAL_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          print(json.dumps(result,ensure_ascii=False))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reference_candidate_rc3/FINAL_ATTEMPT.json
+          if [ "$STATUS" = success ]; then git add reference_candidate_rc3/FINAL_BUILD.json; fi
+          git commit -m "Record RC3 build result: $STATUS [skip ci]"
+          git push origin HEAD:refs/heads/trajectory-functional-reference-v0.9-rc3
