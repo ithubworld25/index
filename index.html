@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="ru" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Гармония — современный сервис подбора проверенных психологов под ваш запрос, темп и бюджет." />
+  <title>Гармония — подбор психолога за 5 минут</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            sage: {
+              50: '#f4f8f3',
+              100: '#e6f0e3',
+              200: '#cfe2ca',
+              300: '#a9cda1',
+              400: '#7fb173',
+              500: '#5f9655',
+              600: '#47763f',
+              700: '#3b5f36',
+              800: '#324d30',
+              900: '#2a4029',
+            },
+            cream: '#fbfaf5',
+            ink: '#17201a',
+          },
+          boxShadow: {
+            soft: '0 24px 70px rgba(42, 64, 41, 0.12)',
+            glow: '0 18px 45px rgba(95, 150, 85, 0.28)',
+          },
+          backgroundImage: {
+            'mesh': 'radial-gradient(circle at 20% 10%, rgba(169,205,161,.45), transparent 28%), radial-gradient(circle at 90% 20%, rgba(207,226,202,.65), transparent 26%), radial-gradient(circle at 50% 95%, rgba(244,248,243,.9), transparent 36%)',
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js" defer></script>
+
+  <style>
+    /* Базовые декоративные стили и состояния появления при скролле */
+    body {
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #fbfaf5;
+      color: #17201a;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(207, 226, 202, 0.72);
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="overflow-x-hidden antialiased selection:bg-sage-200 selection:text-sage-900">
+  <!-- Header -->
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-sage-100/80 bg-cream/85 backdrop-blur-xl">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8" aria-label="Главная навигация">
+      <a href="#hero" class="group flex items-center gap-3" aria-label="Гармония — на главную">
+        <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-sage-600 text-white shadow-glow transition-transform duration-300 group-hover:scale-105">
+          <i data-lucide="leaf" class="h-5 w-5"></i>
+        </span>
+        <span class="text-xl font-black tracking-tight text-ink">Гармония</span>
+      </a>
+
+      <div class="hidden items-center gap-8 text-sm font-semibold text-sage-900/75 lg:flex">
+        <a class="transition hover:text-sage-700" href="#problems">Проблемы</a>
+        <a class="transition hover:text-sage-700" href="#features">Решение</a>
+        <a class="transition hover:text-sage-700" href="#how-it-works">Как работает</a>
+        <a class="transition hover:text-sage-700" href="#testimonials">Отзывы</a>
+      </div>
+
+      <div class="hidden items-center gap-3 lg:flex">
+        <a href="#pricing" class="rounded-full bg-ink px-5 py-3 text-sm font-bold text-white shadow-soft transition duration-300 hover:-translate-y-0.5 hover:bg-sage-700 focus:outline-none focus:ring-4 focus:ring-sage-200">Подобрать психолога</a>
+      </div>
+
+      <button id="menuButton" class="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-sage-200 bg-white text-sage-900 lg:hidden" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Открыть меню">
+        <i data-lucide="menu" class="h-5 w-5"></i>
+      </button>
+    </nav>
+
+    <!-- Mobile menu -->
+    <div id="mobileMenu" class="hidden border-t border-sage-100 bg-cream/95 px-4 pb-5 pt-2 shadow-soft lg:hidden">
+      <div class="mx-auto flex max-w-7xl flex-col gap-2 text-base font-semibold text-sage-900/80">
+        <a class="rounded-2xl px-3 py-3 hover:bg-sage-50" href="#problems">Проблемы</a>
+        <a class="rounded-2xl px-3 py-3 hover:bg-sage-50" href="#features">Решение</a>
+        <a class="rounded-2xl px-3 py-3 hover:bg-sage-50" href="#how-it-works">Как работает</a>
+        <a class="rounded-2xl px-3 py-3 hover:bg-sage-50" href="#testimonials">Отзывы</a>
+        <a class="mt-2 rounded-full bg-ink px-5 py-3 text-center font-bold text-white" href="#pricing">Подобрать психолога</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="relative min-h-screen overflow-hidden bg-mesh px-4 pt-32 sm:px-6 lg:px-8 lg:pt-36">
+      <div class="absolute -left-24 top-36 h-72 w-72 rounded-full bg-sage-200/50 blur-3xl"></div>
+      <div class="absolute -right-24 bottom-16 h-80 w-80 rounded-full bg-sage-300/40 blur-3xl"></div>
+
+      <div class="relative mx-auto grid max-w-7xl items-center gap-12 pb-20 lg:grid-cols-[1.05fr_0.95fr] lg:pb-28">
+        <div class="reveal max-w-3xl">
+          <div class="mb-6 inline-flex items-center gap-2 rounded-full border border-sage-200 bg-white/70 px-4 py-2 text-sm font-bold text-sage-800 shadow-sm backdrop-blur">
+            <span class="relative flex h-2.5 w-2.5">
+              <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-sage-500 opacity-70"></span>
+              <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-sage-600"></span>
+            </span>
+            1 200+ проверенных специалистов онлайн
+          </div>
+
+          <h1 class="text-4xl font-black leading-[1.03] tracking-tight text-ink sm:text-5xl md:text-6xl xl:text-7xl">
+            Найдите психолога, с которым станет легче уже после первой встречи
+          </h1>
+          <p class="mt-6 max-w-2xl text-lg leading-8 text-sage-900/72 sm:text-xl">
+            «Гармония» бережно подбирает специалиста по вашему запросу, характеру и бюджету. Без случайного поиска, долгих анкет и неловких переписок.
+          </p>
+
+          <div class="mt-9 flex flex-col gap-4 sm:flex-row">
+            <a href="#pricing" class="group inline-flex items-center justify-center gap-3 rounded-full bg-sage-600 px-7 py-4 text-base font-extrabold text-white shadow-glow transition duration-300 hover:-translate-y-1 hover:bg-sage-700 focus:outline-none focus:ring-4 focus:ring-sage-200">
+              Начать тест
+              <i data-lucide="arrow-right" class="h-5 w-5 transition group-hover:translate-x-1"></i>
+            </a>
+            <a href="#how-it-works" class="inline-flex items-center justify-center gap-3 rounded-full border border-sage-200 bg-white/75 px-7 py-4 text-base font-extrabold text-sage-900 shadow-sm backdrop-blur transition duration-300 hover:-translate-y-1 hover:border-sage-300 hover:bg-white">
+              <i data-lucide="play-circle" class="h-5 w-5"></i>
+              Как это работает
+            </a>
+          </div>
+
+          <div class="mt-10 grid max-w-xl grid-cols-3 gap-3 sm:gap-6">
+            <div>
+              <p class="text-2xl font-black text-ink sm:text-3xl">5 мин</p>
+              <p class="mt-1 text-sm text-sage-900/62">до подбора</p>
+            </div>
+            <div>
+              <p class="text-2xl font-black text-ink sm:text-3xl">4.9/5</p>
+              <p class="mt-1 text-sm text-sage-900/62">оценка сессий</p>
+            </div>
+            <div>
+              <p class="text-2xl font-black text-ink sm:text-3xl">24/7</p>
+              <p class="mt-1 text-sm text-sage-900/62">поддержка</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal relative" style="transition-delay: 120ms;">
+          <div class="absolute -inset-5 rounded-[2.5rem] bg-gradient-to-br from-sage-200/80 to-white/10 blur-2xl"></div>
+          <div class="relative overflow-hidden rounded-[2rem] border border-white/70 bg-white shadow-soft sm:rounded-[3rem]">
+            <img src="https://images.unsplash.com/photo-1517486808906-6ca8b3f04846?auto=format&fit=crop&w=1200&q=85" alt="Спокойная встреча с психологом в уютной светлой комнате" class="h-[420px] w-full object-cover sm:h-[560px]" />
+            <div class="absolute inset-x-4 bottom-4 rounded-[1.5rem] bg-white/88 p-4 shadow-soft backdrop-blur-xl sm:inset-x-6 sm:bottom-6 sm:p-5">
+              <div class="flex items-start gap-4">
+                <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-sage-100 text-sage-700">
+                  <i data-lucide="sparkles" class="h-6 w-6"></i>
+                </div>
+                <div>
+                  <p class="font-extrabold text-ink">Ваш персональный матч</p>
+                  <p class="mt-1 text-sm leading-6 text-sage-900/68">Алгоритм учитывает запрос, опыт терапевта, формат общения и ваш комфорт.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust / Social Proof -->
+    <section class="border-y border-sage-100 bg-white/70 px-4 py-8 sm:px-6 lg:px-8" aria-label="Нам доверяют">
+      <div class="mx-auto max-w-7xl">
+        <p class="text-center text-sm font-bold uppercase tracking-[0.2em] text-sage-900/45">О нас говорят и нам доверяют</p>
+        <div class="mt-7 grid grid-cols-2 items-center gap-4 text-center text-xl font-black text-sage-900/35 sm:grid-cols-3 lg:grid-cols-6">
+          <span class="rounded-2xl bg-sage-50 px-4 py-4">Forbes</span>
+          <span class="rounded-2xl bg-sage-50 px-4 py-4">РБК</span>
+          <span class="rounded-2xl bg-sage-50 px-4 py-4">vc.ru</span>
+          <span class="rounded-2xl bg-sage-50 px-4 py-4">Psychologies</span>
+          <span class="rounded-2xl bg-sage-50 px-4 py-4">Skillbox</span>
+          <span class="rounded-2xl bg-sage-50 px-4 py-4">Habr</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pain Points -->
+    <section id="problems" class="px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mx-auto max-w-3xl text-center">
+          <span class="text-sm font-black uppercase tracking-[0.22em] text-sage-600">Проблемы</span>
+          <h2 class="mt-4 text-3xl font-black tracking-tight text-ink sm:text-5xl">Когда нужна помощь, выбирать специалиста особенно сложно</h2>
+          <p class="mt-5 text-lg leading-8 text-sage-900/68">Мы убираем хаос из поиска и создаем понятный, безопасный маршрут к поддержке.</p>
+        </div>
+
+        <div class="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <article class="reveal rounded-[2rem] border border-sage-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-soft">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-100 p-3 text-sage-700"><i data-lucide="search-x" class="h-6 w-6"></i></div>
+            <h3 class="text-xl font-black text-ink">Слишком много вариантов</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Сотни профилей, разные подходы, непонятные регалии — трудно понять, кто подойдет именно вам.</p>
+          </article>
+          <article class="reveal rounded-[2rem] border border-sage-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-soft" style="transition-delay: 80ms;">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-100 p-3 text-sage-700"><i data-lucide="shield-alert" class="h-6 w-6"></i></div>
+            <h3 class="text-xl font-black text-ink">Страх ошибиться</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Непросто довериться незнакомому человеку, особенно если уже был неудачный опыт терапии.</p>
+          </article>
+          <article class="reveal rounded-[2rem] border border-sage-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-soft" style="transition-delay: 160ms;">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-100 p-3 text-sage-700"><i data-lucide="clock-3" class="h-6 w-6"></i></div>
+            <h3 class="text-xl font-black text-ink">Нет времени на поиск</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Когда тревожно или тяжело, хочется получить поддержку быстро, а не неделями сравнивать анкеты.</p>
+          </article>
+          <article class="reveal rounded-[2rem] border border-sage-100 bg-white p-6 shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-soft" style="transition-delay: 240ms;">
+            <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-100 p-3 text-sage-700"><i data-lucide="wallet-cards" class="h-6 w-6"></i></div>
+            <h3 class="text-xl font-black text-ink">Непрозрачная цена</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Мы заранее показываем стоимость и помогаем подобрать формат без давления и скрытых платежей.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solution / Features -->
+    <section id="features" class="overflow-hidden bg-sage-50 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
+        <div class="reveal relative order-2 lg:order-1">
+          <div class="absolute -inset-4 rounded-[2.5rem] bg-white/70 blur-2xl"></div>
+          <div class="relative rounded-[2rem] border border-sage-100 bg-white p-4 shadow-soft sm:p-6">
+            <div class="rounded-[1.5rem] bg-ink p-5 text-white sm:p-7">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-sm font-bold text-sage-200">Результат подбора</p>
+                  <h3 class="mt-2 text-2xl font-black">3 терапевта под ваш запрос</h3>
+                </div>
+                <div class="rounded-2xl bg-white/10 p-3"><i data-lucide="heart-handshake" class="h-7 w-7 text-sage-200"></i></div>
+              </div>
+              <div class="mt-7 space-y-4">
+                <div class="rounded-2xl bg-white/10 p-4">
+                  <div class="flex items-center gap-4">
+                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=160&q=80" alt="Психолог Анна" class="h-14 w-14 rounded-2xl object-cover" />
+                    <div class="min-w-0 flex-1">
+                      <p class="font-extrabold">Анна Морозова</p>
+                      <p class="mt-1 text-sm text-white/65">КПТ, тревога, самооценка · 8 лет</p>
+                    </div>
+                    <span class="rounded-full bg-sage-300/20 px-3 py-1 text-sm font-bold text-sage-100">98%</span>
+                  </div>
+                </div>
+                <div class="rounded-2xl bg-white/10 p-4">
+                  <div class="flex items-center gap-4">
+                    <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=160&q=80" alt="Психолог Мария" class="h-14 w-14 rounded-2xl object-cover" />
+                    <div class="min-w-0 flex-1">
+                      <p class="font-extrabold">Мария Белова</p>
+                      <p class="mt-1 text-sm text-white/65">Гештальт, отношения · 11 лет</p>
+                    </div>
+                    <span class="rounded-full bg-sage-300/20 px-3 py-1 text-sm font-bold text-sage-100">95%</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal order-1 lg:order-2">
+          <span class="text-sm font-black uppercase tracking-[0.22em] text-sage-600">Решение</span>
+          <h2 class="mt-4 text-3xl font-black tracking-tight text-ink sm:text-5xl">Сервис, который подбирает не просто психолога, а правильный контакт</h2>
+          <p class="mt-6 text-lg leading-8 text-sage-900/68">Мы соединяем клиническую экспертизу, заботливый онбординг и умный алгоритм совместимости, чтобы первая сессия была спокойной и осмысленной.</p>
+
+          <div class="mt-8 space-y-5">
+            <div class="flex gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-sage-700 shadow-sm"><i data-lucide="badge-check" class="h-6 w-6"></i></div>
+              <div>
+                <h3 class="text-lg font-black text-ink">Проверенные специалисты</h3>
+                <p class="mt-1 leading-7 text-sage-900/66">Образование, супервизия, этический кодекс и опыт подтверждаются до попадания в базу.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-sage-700 shadow-sm"><i data-lucide="sliders-horizontal" class="h-6 w-6"></i></div>
+              <div>
+                <h3 class="text-lg font-black text-ink">Точный матчинг</h3>
+                <p class="mt-1 leading-7 text-sage-900/66">Учитываем тему запроса, метод терапии, график, бюджет, формат и важные личные предпочтения.</p>
+              </div>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white text-sage-700 shadow-sm"><i data-lucide="message-circle-heart" class="h-6 w-6"></i></div>
+              <div>
+                <h3 class="text-lg font-black text-ink">Поддержка куратора</h3>
+                <p class="mt-1 leading-7 text-sage-900/66">Если специалист не подошел, мы бесплатно предложим замену и поможем мягко продолжить путь.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Step-by-Step -->
+    <section id="how-it-works" class="px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div class="max-w-3xl">
+            <span class="text-sm font-black uppercase tracking-[0.22em] text-sage-600">Как это работает</span>
+            <h2 class="mt-4 text-3xl font-black tracking-tight text-ink sm:text-5xl">От запроса до первой сессии — за 4 простых шага</h2>
+          </div>
+          <a href="#pricing" class="inline-flex w-fit items-center gap-2 rounded-full border border-sage-200 bg-white px-5 py-3 font-bold text-sage-900 shadow-sm transition hover:-translate-y-0.5 hover:border-sage-300">
+            Пройти подбор <i data-lucide="arrow-up-right" class="h-5 w-5"></i>
+          </a>
+        </div>
+
+        <div class="mt-12 grid gap-5 lg:grid-cols-4">
+          <div class="reveal relative rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-sage-100">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-600 text-xl font-black text-white">1</span>
+            <h3 class="mt-6 text-xl font-black text-ink">Отвечаете на вопросы</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Короткий тест помогает понять ваш запрос, цели и ожидания от терапии.</p>
+          </div>
+          <div class="reveal relative rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-sage-100" style="transition-delay: 80ms;">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-600 text-xl font-black text-white">2</span>
+            <h3 class="mt-6 text-xl font-black text-ink">Получаете подборку</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Показываем 3 наиболее подходящих специалиста с понятными профилями.</p>
+          </div>
+          <div class="reveal relative rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-sage-100" style="transition-delay: 160ms;">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-600 text-xl font-black text-white">3</span>
+            <h3 class="mt-6 text-xl font-black text-ink">Выбираете слот</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">Бронируете удобное время онлайн или очно и оплачиваете безопасно.</p>
+          </div>
+          <div class="reveal relative rounded-[2rem] bg-white p-6 shadow-sm ring-1 ring-sage-100" style="transition-delay: 240ms;">
+            <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sage-600 text-xl font-black text-white">4</span>
+            <h3 class="mt-6 text-xl font-black text-ink">Начинаете терапию</h3>
+            <p class="mt-3 leading-7 text-sage-900/66">После первой встречи можно продолжить или запросить бесплатную замену.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="bg-white px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="mx-auto max-w-7xl">
+        <div class="reveal mx-auto max-w-3xl text-center">
+          <span class="text-sm font-black uppercase tracking-[0.22em] text-sage-600">Отзывы</span>
+          <h2 class="mt-4 text-3xl font-black tracking-tight text-ink sm:text-5xl">Люди приходят за поддержкой — и остаются в бережном процессе</h2>
+        </div>
+
+        <div class="reveal mt-12 overflow-hidden rounded-[2rem] border border-sage-100 bg-cream p-4 shadow-soft sm:p-6">
+          <div id="testimonialTrack" class="flex transition-transform duration-500 ease-out">
+            <article class="min-w-full p-2 md:min-w-[50%] lg:min-w-[33.333%]">
+              <div class="h-full rounded-[1.5rem] bg-white p-6 shadow-sm">
+                <div class="mb-5 flex text-amber-400" aria-label="5 из 5 звезд">★★★★★</div>
+                <p class="leading-8 text-sage-900/72">«Я долго откладывала терапию, потому что боялась ошибиться. В Гармонии мне подобрали специалиста с первого раза — стало спокойно уже на созвоне-знакомстве.»</p>
+                <div class="mt-6 flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80" alt="Аватар Елены" class="h-12 w-12 rounded-full object-cover" />
+                  <div><p class="font-black text-ink">Елена, 31</p><p class="text-sm text-sage-900/55">маркетолог</p></div>
+                </div>
+              </div>
+            </article>
+            <article class="min-w-full p-2 md:min-w-[50%] lg:min-w-[33.333%]">
+              <div class="h-full rounded-[1.5rem] bg-white p-6 shadow-sm">
+                <div class="mb-5 flex text-amber-400" aria-label="5 из 5 звезд">★★★★★</div>
+                <p class="leading-8 text-sage-900/72">«Понравилось, что никто не давил. Я выбрал формат, цену и время, а куратор помог понять, чего ждать от первой сессии.»</p>
+                <div class="mt-6 flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80" alt="Аватар Кирилла" class="h-12 w-12 rounded-full object-cover" />
+                  <div><p class="font-black text-ink">Кирилл, 28</p><p class="text-sm text-sage-900/55">продуктовый дизайнер</p></div>
+                </div>
+              </div>
+            </article>
+            <article class="min-w-full p-2 md:min-w-[50%] lg:min-w-[33.333%]">
+              <div class="h-full rounded-[1.5rem] bg-white p-6 shadow-sm">
+                <div class="mb-5 flex text-amber-400" aria-label="5 из 5 звезд">★★★★★</div>
+                <p class="leading-8 text-sage-900/72">«После переезда стало тревожно. Сервис быстро нашел психолога, который работает именно с адаптацией и выгоранием. Очень благодарна.»</p>
+                <div class="mt-6 flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80" alt="Аватар Ники" class="h-12 w-12 rounded-full object-cover" />
+                  <div><p class="font-black text-ink">Ника, 35</p><p class="text-sm text-sage-900/55">аналитик</p></div>
+                </div>
+              </div>
+            </article>
+            <article class="min-w-full p-2 md:min-w-[50%] lg:min-w-[33.333%]">
+              <div class="h-full rounded-[1.5rem] bg-white p-6 shadow-sm">
+                <div class="mb-5 flex text-amber-400" aria-label="5 из 5 звезд">★★★★★</div>
+                <p class="leading-8 text-sage-900/72">«Самое ценное — возможность заменить специалиста без чувства вины. Но в итоге менять не пришлось: совпали и подход, и темп.»</p>
+                <div class="mt-6 flex items-center gap-4">
+                  <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=120&q=80" alt="Аватар Артема" class="h-12 w-12 rounded-full object-cover" />
+                  <div><p class="font-black text-ink">Артем, 39</p><p class="text-sm text-sage-900/55">предприниматель</p></div>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div class="mt-5 flex items-center justify-between gap-4 px-2">
+            <div class="flex gap-2" id="testimonialDots" aria-label="Навигация отзывов"></div>
+            <div class="flex gap-2">
+              <button id="prevTestimonial" class="flex h-11 w-11 items-center justify-center rounded-full border border-sage-200 bg-white text-sage-900 transition hover:bg-sage-50" type="button" aria-label="Предыдущий отзыв"><i data-lucide="chevron-left" class="h-5 w-5"></i></button>
+              <button id="nextTestimonial" class="flex h-11 w-11 items-center justify-center rounded-full border border-sage-200 bg-white text-sage-900 transition hover:bg-sage-50" type="button" aria-label="Следующий отзыв"><i data-lucide="chevron-right" class="h-5 w-5"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing / CTA Block -->
+    <section id="pricing" class="relative overflow-hidden px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
+      <div class="absolute inset-0 -z-10 bg-mesh"></div>
+      <div class="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <div class="reveal">
+          <span class="text-sm font-black uppercase tracking-[0.22em] text-sage-600">Старт</span>
+          <h2 class="mt-4 text-3xl font-black tracking-tight text-ink sm:text-5xl">Начните с бесплатного подбора — первую сессию оплатите только после выбора</h2>
+          <p class="mt-6 text-lg leading-8 text-sage-900/68">Оставьте контакт, и мы пришлем короткий тест. После него вы получите персональную подборку психологов и сможете выбрать удобный слот.</p>
+
+          <div class="mt-8 grid gap-4 sm:grid-cols-3">
+            <div class="glass-card rounded-[1.5rem] p-5">
+              <p class="text-3xl font-black text-ink">0 ₽</p>
+              <p class="mt-2 text-sm leading-6 text-sage-900/62">подбор и консультация куратора</p>
+            </div>
+            <div class="glass-card rounded-[1.5rem] p-5">
+              <p class="text-3xl font-black text-ink">50 мин</p>
+              <p class="mt-2 text-sm leading-6 text-sage-900/62">стандартная терапевтическая сессия</p>
+            </div>
+            <div class="glass-card rounded-[1.5rem] p-5">
+              <p class="text-3xl font-black text-ink">от 2 500 ₽</p>
+              <p class="mt-2 text-sm leading-6 text-sage-900/62">стоимость встречи со специалистом</p>
+            </div>
+          </div>
+        </div>
+
+        <form id="leadForm" class="reveal rounded-[2rem] border border-sage-100 bg-white p-5 shadow-soft sm:p-8" novalidate>
+          <div class="mb-7">
+            <h3 class="text-2xl font-black text-ink">Получить персональную подборку</h3>
+            <p class="mt-2 leading-7 text-sage-900/62">Ответим в мессенджере в течение 15 минут.</p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block">
+              <span class="mb-2 block text-sm font-bold text-sage-900/80">Имя</span>
+              <input class="w-full rounded-2xl border border-sage-200 bg-sage-50/50 px-4 py-3.5 outline-none transition focus:border-sage-500 focus:bg-white focus:ring-4 focus:ring-sage-100" type="text" name="name" placeholder="Анна" required />
+            </label>
+            <label class="block">
+              <span class="mb-2 block text-sm font-bold text-sage-900/80">Телефон или Telegram</span>
+              <input class="w-full rounded-2xl border border-sage-200 bg-sage-50/50 px-4 py-3.5 outline-none transition focus:border-sage-500 focus:bg-white focus:ring-4 focus:ring-sage-100" type="text" name="contact" placeholder="@username" required />
+            </label>
+          </div>
+
+          <label class="mt-4 block">
+            <span class="mb-2 block text-sm font-bold text-sage-900/80">Что сейчас беспокоит?</span>
+            <select class="w-full rounded-2xl border border-sage-200 bg-sage-50/50 px-4 py-3.5 outline-none transition focus:border-sage-500 focus:bg-white focus:ring-4 focus:ring-sage-100" name="topic" required>
+              <option value="">Выберите тему</option>
+              <option>Тревога и панические атаки</option>
+              <option>Отношения и границы</option>
+              <option>Выгорание и работа</option>
+              <option>Самооценка и принятие себя</option>
+              <option>Пока не знаю, хочу разобраться</option>
+            </select>
+          </label>
+
+          <label class="mt-4 block">
+            <span class="mb-2 block text-sm font-bold text-sage-900/80">Комментарий</span>
+            <textarea class="min-h-28 w-full resize-none rounded-2xl border border-sage-200 bg-sage-50/50 px-4 py-3.5 outline-none transition focus:border-sage-500 focus:bg-white focus:ring-4 focus:ring-sage-100" name="message" placeholder="Расскажите в двух словах, какой формат поддержки вам нужен"></textarea>
+          </label>
+
+          <button class="mt-6 inline-flex w-full items-center justify-center gap-3 rounded-full bg-ink px-7 py-4 text-base font-extrabold text-white shadow-soft transition duration-300 hover:-translate-y-1 hover:bg-sage-700 focus:outline-none focus:ring-4 focus:ring-sage-200" type="submit">
+            Получить подборку
+            <i data-lucide="send" class="h-5 w-5"></i>
+          </button>
+          <p id="formMessage" class="mt-4 hidden rounded-2xl bg-sage-50 px-4 py-3 text-sm font-semibold text-sage-800" role="status"></p>
+          <p class="mt-4 text-xs leading-6 text-sage-900/48">Нажимая кнопку, вы соглашаетесь с обработкой персональных данных и политикой конфиденциальности.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-sage-100 bg-ink px-4 py-10 text-white sm:px-6 lg:px-8">
+    <div class="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+      <div>
+        <a href="#hero" class="flex items-center gap-3">
+          <span class="flex h-10 w-10 items-center justify-center rounded-2xl bg-sage-500 text-white"><i data-lucide="leaf" class="h-5 w-5"></i></span>
+          <span class="text-xl font-black tracking-tight">Гармония</span>
+        </a>
+        <p class="mt-3 max-w-md text-sm leading-6 text-white/55">Сервис бережного подбора психологов для онлайн- и очной терапии.</p>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-3 text-sm font-semibold text-white/65">
+        <a class="transition hover:text-white" href="#problems">Проблемы</a>
+        <span class="text-white/20">/</span>
+        <a class="transition hover:text-white" href="#how-it-works">Как работает</a>
+        <span class="text-white/20">/</span>
+        <a class="transition hover:text-white" href="#pricing">Политика конфиденциальности</a>
+      </div>
+
+      <div class="flex gap-3">
+        <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:-translate-y-0.5 hover:bg-white/15" aria-label="Telegram"><i data-lucide="send" class="h-5 w-5"></i></a>
+        <a href="https://vk.com/" target="_blank" rel="noopener noreferrer" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:-translate-y-0.5 hover:bg-white/15" aria-label="VK"><i data-lucide="message-circle" class="h-5 w-5"></i></a>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener noreferrer" class="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:-translate-y-0.5 hover:bg-white/15" aria-label="YouTube"><i data-lucide="youtube" class="h-5 w-5"></i></a>
+      </div>
+    </div>
+    <div class="mx-auto mt-8 max-w-7xl border-t border-white/10 pt-6 text-sm text-white/45">
+      © <span id="year"></span> Гармония. Все права защищены.
+    </div>
+  </footer>
+
+  <script>
+    // Инициализация иконок Lucide после загрузки CDN-скрипта.
+    window.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+
+    // Мобильное меню с закрытием после перехода к секции.
+    const menuButton = document.querySelector('#menuButton');
+    const mobileMenu = document.querySelector('#mobileMenu');
+
+    menuButton.addEventListener('click', () => {
+      const isOpen = !mobileMenu.classList.contains('hidden');
+      mobileMenu.classList.toggle('hidden');
+      menuButton.setAttribute('aria-expanded', String(!isOpen));
+      menuButton.innerHTML = isOpen
+        ? '<i data-lucide="menu" class="h-5 w-5"></i>'
+        : '<i data-lucide="x" class="h-5 w-5"></i>';
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    });
+
+    mobileMenu.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+        menuButton.setAttribute('aria-expanded', 'false');
+        menuButton.innerHTML = '<i data-lucide="menu" class="h-5 w-5"></i>';
+        if (window.lucide) {
+          window.lucide.createIcons();
+        }
+      });
+    });
+
+    // Плавное появление элементов при скролле.
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.16 });
+
+    document.querySelectorAll('.reveal').forEach((element) => revealObserver.observe(element));
+
+    // Слайдер отзывов без сторонних зависимостей.
+    const testimonialTrack = document.querySelector('#testimonialTrack');
+    const testimonialCards = Array.from(testimonialTrack.children);
+    const testimonialDots = document.querySelector('#testimonialDots');
+    const prevButton = document.querySelector('#prevTestimonial');
+    const nextButton = document.querySelector('#nextTestimonial');
+    let currentSlide = 0;
+
+    const getVisibleCards = () => {
+      if (window.innerWidth >= 1024) return 3;
+      if (window.innerWidth >= 768) return 2;
+      return 1;
+    };
+
+    const getMaxSlide = () => Math.max(0, testimonialCards.length - getVisibleCards());
+
+    const renderDots = () => {
+      testimonialDots.innerHTML = '';
+      for (let index = 0; index <= getMaxSlide(); index += 1) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `h-2.5 rounded-full transition-all ${index === currentSlide ? 'w-8 bg-sage-600' : 'w-2.5 bg-sage-200 hover:bg-sage-300'}`;
+        dot.setAttribute('aria-label', `Показать отзыв ${index + 1}`);
+        dot.addEventListener('click', () => {
+          currentSlide = index;
+          updateSlider();
+        });
+        testimonialDots.appendChild(dot);
+      }
+    };
+
+    const updateSlider = () => {
+      currentSlide = Math.min(currentSlide, getMaxSlide());
+      const cardWidth = testimonialCards[0].getBoundingClientRect().width;
+      testimonialTrack.style.transform = `translateX(-${currentSlide * cardWidth}px)`;
+      renderDots();
+    };
+
+    prevButton.addEventListener('click', () => {
+      currentSlide = currentSlide === 0 ? getMaxSlide() : currentSlide - 1;
+      updateSlider();
+    });
+
+    nextButton.addEventListener('click', () => {
+      currentSlide = currentSlide === getMaxSlide() ? 0 : currentSlide + 1;
+      updateSlider();
+    });
+
+    window.addEventListener('resize', updateSlider);
+    updateSlider();
+
+    // Простая валидация формы и дружелюбное сообщение об успешной отправке.
+    const leadForm = document.querySelector('#leadForm');
+    const formMessage = document.querySelector('#formMessage');
+
+    leadForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(leadForm);
+      const requiredFields = ['name', 'contact', 'topic'];
+      const hasEmptyRequiredField = requiredFields.some((field) => !String(formData.get(field)).trim());
+
+      formMessage.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'bg-sage-50', 'text-sage-800');
+
+      if (hasEmptyRequiredField) {
+        formMessage.classList.add('bg-red-50', 'text-red-700');
+        formMessage.textContent = 'Пожалуйста, заполните имя, контакт и тему запроса — так мы сможем подготовить точную подборку.';
+        return;
+      }
+
+      formMessage.classList.add('bg-sage-50', 'text-sage-800');
+      formMessage.textContent = `Спасибо, ${formData.get('name').trim()}! Мы получили заявку и скоро пришлем короткий тест для подбора.`;
+      leadForm.reset();
+    });
+
+    // Актуальный год в футере.
+    document.querySelector('#year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
