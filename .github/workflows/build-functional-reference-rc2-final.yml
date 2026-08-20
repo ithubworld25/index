@@ -13,11 +13,20 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: trajectory-functional-reference-v0.9-rc2
+          fetch-depth: 0
+
       - name: Build and verify RC2
         run: |
+          set -euo pipefail
           python3 reference_candidate_rc2/patch_builder.py
           python3 reference_candidate_rc2/build_rc2.py
-      - name: Publish prerelease
+          cp build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md build_rc2/GITHUB_CONNECTION_MANUAL_RU.md
+          cp build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md build_rc2/VERIFICATION_REPORT_RC2.md
+          cp build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json build_rc2/AUTOTEST_RESULTS_RC2.json
+
+      - name: Publish stable RC2 prerelease assets
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -27,12 +36,15 @@ jobs:
             build_rc2/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip
             build_rc2/PACKAGE_SHA256.txt
             build_rc2/START_SHA256.txt
-            build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md
-            build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md
-            build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json
+            build_rc2/GITHUB_CONNECTION_MANUAL_RU.md
+            build_rc2/VERIFICATION_REPORT_RC2.md
+            build_rc2/AUTOTEST_RESULTS_RC2.json
           )
           if gh release view "$TAG" >/dev/null 2>&1; then
-            gh release upload "$TAG" "${ASSETS[@]}" --clobber
+            for asset in "${ASSETS[@]}"; do
+              gh release delete-asset "$TAG" "$(basename "$asset")" -y >/dev/null 2>&1 || true
+            done
+            gh release upload "$TAG" "${ASSETS[@]}"
           else
             gh release create "$TAG" "${ASSETS[@]}" \
               --target "${GITHUB_SHA}" \
@@ -40,6 +52,7 @@ jobs:
               --notes 'Кандидат функционального эталона после командной проверки rc1. Содержит отчёт автоматической проверки. Не является финальным v1.0.' \
               --prerelease
           fi
+
       - uses: actions/upload-artifact@v4
         with:
           name: TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2-final
@@ -47,11 +60,12 @@ jobs:
             build_rc2/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip
             build_rc2/PACKAGE_SHA256.txt
             build_rc2/START_SHA256.txt
-            build_rc2/package/GITHUB_CONNECTION_MANUAL_RU.md
-            build_rc2/package/ОТЧЕТ_ПРОВЕРКИ_RC2.md
-            build_rc2/package/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json
+            build_rc2/GITHUB_CONNECTION_MANUAL_RU.md
+            build_rc2/VERIFICATION_REPORT_RC2.md
+            build_rc2/AUTOTEST_RESULTS_RC2.json
           retention-days: 14
           compression-level: 0
+
       - name: Record final result
         if: always()
         env:
@@ -60,7 +74,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
-          import datetime,json,os
+          import datetime, json, os
           status=os.environ['STATUS']
           name='TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc2.zip'
           result={
@@ -76,16 +90,17 @@ jobs:
             result.update({
               'zip_name':name,
               'zip_size':Path('build_rc2/'+name).stat().st_size,
-              'zip_sha256':Path('build_rc2/PACKAGE_SHA256.txt').read_text().split()[0],
-              'start_sha256':Path('build_rc2/START_SHA256.txt').read_text().split()[0],
+              'zip_sha256':Path('build_rc2/PACKAGE_SHA256.txt').read_text(encoding='utf-8').split()[0],
+              'start_sha256':Path('build_rc2/START_SHA256.txt').read_text(encoding='utf-8').split()[0],
               'release_url':'https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v0.9-rc2',
               'download_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/'+name,
               'manual_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/GITHUB_CONNECTION_MANUAL_RU.md',
-              'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/ОТЧЕТ_ПРОВЕРКИ_RC2.md',
-              'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/РЕЗУЛЬТАТЫ_АВТОТЕСТОВ_RC2.json',
+              'report_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/VERIFICATION_REPORT_RC2.md',
+              'autotest_url':'https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc2/AUTOTEST_RESULTS_RC2.json',
             })
           Path('reference_candidate_rc2/FINAL_ATTEMPT.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
-          if status=='success': Path('reference_candidate_rc2/FINAL_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+          if status=='success':
+            Path('reference_candidate_rc2/FINAL_BUILD.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
           print(json.dumps(result,ensure_ascii=False))
           PY
           git config user.name 'github-actions[bot]'
@@ -93,4 +108,4 @@ jobs:
           git add reference_candidate_rc2/FINAL_ATTEMPT.json
           if [ "$STATUS" = success ]; then git add reference_candidate_rc2/FINAL_BUILD.json; fi
           git commit -m "Record final RC2 result: $STATUS [skip ci]"
-          git push origin HEAD:trajectory-functional-reference-v0.9-rc2
+          git push origin HEAD:refs/heads/trajectory-functional-reference-v0.9-rc2
