@@ -1,0 +1,19 @@
+{
+  "package": "TRAJECTORY_FUNCTIONAL_REFERENCE",
+  "version": "1.0.0",
+  "status": "success",
+  "recorded_at": "2026-08-20T15:25:23.383788+00:00",
+  "workflow_run_id": "32385974330",
+  "commit_sha": "3e3a61bd07650a0c4153c62d30f0e575cf2c803e",
+  "workflow_url": "https://github.com/ithubworld25/index/actions/runs/32385974330",
+  "zip_name": "TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip",
+  "zip_size": 736855,
+  "zip_sha256": "b0791b1a47cc82ba03576d4529466c8ede57a8bffb883c23165b1da48b95e932",
+  "start_sha256": "f9b11cde4bb401a346ec46e479e7f2aa5b161ca9e83547013141eaf43cde58d1",
+  "release_url": "https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v1.0",
+  "download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip",
+  "acceptance_docx_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/ACCEPTANCE_RECORD_v1.0.docx",
+  "report_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/VERIFICATION_REPORT_v1.0.md",
+  "autotest_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/AUTOTEST_RESULTS_v1.0.json",
+  "manifest_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v1.0/FUNCTIONAL_REFERENCE_MANIFEST_v1.0.json"
+}
