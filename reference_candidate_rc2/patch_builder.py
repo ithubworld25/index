@@ -3,7 +3,7 @@ from pathlib import Path
 path = Path(__file__).with_name('build_rc2.py')
 source = path.read_text(encoding='utf-8')
 
-# 1. Replace the entire browser-validation loop while it is still pristine.
+# 1. Replace the browser-validation loop with retries and detailed scenario output.
 browser_old = '''    for mode in ("light", "dark", "scenario"):
         profile = TEST / f"profile-{mode}"
         profile.mkdir()
@@ -91,15 +91,17 @@ replacements = {
       console.log('RC2_SCENARIO',JSON.stringify(checks));''': '''      const soft=allIssues().find(issue=>issue.rule_id==='SOFT_DISTRIBUTION');
       if(soft){focusIssue(soft.issue_id);state.onlyIssues=true;renderAll();}
       setTimeout(()=>{
-        set('semester_issue_context',Boolean(document.querySelector('.semester.sem-issue'))&&Boolean(document.querySelector('.discipline.issue-existing,.discipline.issue-candidate')));
+        const semesterMarked=Boolean(document.querySelector('.semester.sem-issue'));
+        const contextMarked=Boolean(document.querySelector('.discipline.issue-existing,.discipline.issue-candidate'));
+        set('semester_issue_context',semesterMarked&&contextMarked);
         set('editing_controls_hidden',['editBtn','saveSessionBtn','loadSessionBtn','snapshotBtn','changesBtn'].every(id=>byId(id)?.classList.contains('rc2-hidden')));
         set('rc2_builtin_self_test',document.documentElement.dataset.rc2SelfTest==='ok');
         const ok=Object.values(checks).every(Boolean);
         document.documentElement.dataset.rc2Scenario=ok?'ok':'failed';
-        document.documentElement.dataset.rc2ScenarioResults=encodeURIComponent(JSON.stringify(checks));
+        document.documentElement.dataset.rc2ScenarioResults=encodeURIComponent(JSON.stringify({...checks,semesterMarked,contextMarked}));
         window.__RC2_SCENARIO_RESULTS__=checks;
-        console.log('RC2_SCENARIO',JSON.stringify(checks));
-      },700);''',
+        console.log('RC2_SCENARIO',JSON.stringify({...checks,semesterMarked,contextMarked}));
+      },900);''',
 }
 
 for old, new in replacements.items():
@@ -108,4 +110,35 @@ for old, new in replacements.items():
     source = source.replace(old, new, 1)
 
 path.write_text(source, encoding='utf-8')
-print({'browser_patch': True, 'scenario_patches': len(replacements), 'file': str(path)})
+
+# 3. Make semester issue context explicit in the runtime instead of relying only on the base renderer.
+override_path = Path(__file__).with_name('rc2_override.js')
+override = override_path.read_text(encoding='utf-8')
+context_old = '''    if (selected) {
+      const context = issueContextNodeIds(selected);
+      cards.forEach(card => {
+        if (!context.has(card.dataset.nodeId)) card.classList.add('issue-context-dim');
+      });
+    }'''
+context_new = '''    if (selected) {
+      const primary = new Set(selected.primary_node_ids || []);
+      const existing = new Set(selected.existing_node_ids || []);
+      const candidates = new Set(selected.candidate_node_ids || []);
+      const related = new Set(selected.related_node_ids || []);
+      const context = new Set([...primary, ...existing, ...candidates, ...related]);
+      cards.forEach(card => {
+        const id = card.dataset.nodeId;
+        card.classList.remove('issue-primary', 'issue-existing', 'issue-candidate', 'issue-related');
+        if (primary.has(id)) card.classList.add('issue-primary');
+        else if (existing.has(id)) card.classList.add('issue-existing');
+        else if (candidates.has(id)) card.classList.add('issue-candidate');
+        else if (related.has(id)) card.classList.add('issue-related');
+        else if (!context.has(id)) card.classList.add('issue-context-dim');
+      });
+    }'''
+if context_old not in override:
+    raise SystemExit('runtime issue-context block not found')
+override = override.replace(context_old, context_new, 1)
+override_path.write_text(override, encoding='utf-8')
+
+print({'browser_patch': True, 'scenario_patches': len(replacements), 'runtime_issue_context_patch': True, 'file': str(path)})
