@@ -1,0 +1,18 @@
+{
+  "package": "TRAJECTORY_FUNCTIONAL_REFERENCE",
+  "version": "0.9.0-rc3",
+  "status": "success",
+  "recorded_at": "2026-08-20T14:04:22.014363+00:00",
+  "workflow_run_id": "32377882865",
+  "commit_sha": "11c3be99de427b461219608986255d2b8da1b2d6",
+  "workflow_url": "https://github.com/ithubworld25/index/actions/runs/32377882865",
+  "zip_name": "TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc3.zip",
+  "zip_size": 736892,
+  "zip_sha256": "2cca7ad1e82b6dc1e7ea198cd4ff42db4ca2ba8f90ec86e5928c97c4fcf26a05",
+  "start_sha256": "bc6d1bfd5adc2fb0d1de90a3559c5d5ff3c1fe4440de6477564be281a110f00b",
+  "release_url": "https://github.com/ithubworld25/index/releases/tag/trajectory-functional-reference-v0.9-rc3",
+  "download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/TRAJECTORY_FUNCTIONAL_REFERENCE_v0.9-rc3.zip",
+  "protocol_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/PROTOKOL_PRIEMKI_TRAJECTORY_REFERENCE_v0.9-rc3.docx",
+  "report_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/VERIFICATION_REPORT_RC3.md",
+  "autotest_url": "https://github.com/ithubworld25/index/releases/download/trajectory-functional-reference-v0.9-rc3/AUTOTEST_RESULTS_RC3.json"
+}
