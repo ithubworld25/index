@@ -1,0 +1,71 @@
+/* TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc3 */
+.discipline.same-semester-related{
+  opacity:1!important;
+  outline:3px solid color-mix(in srgb,var(--same-semester-color,var(--accent)) 70%,transparent);
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--same-semester-color,var(--accent)) 16%,transparent),var(--shadow);
+}
+.same-semester-badge{
+  display:inline-flex;
+  align-items:center;
+  border:1px dashed currentColor;
+  border-radius:999px;
+  padding:1px 5px;
+  font-size:8px;
+  font-weight:850;
+  color:var(--accent);
+  background:var(--panel-alt);
+}
+.rc3-same-semester-section{
+  margin-top:12px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:9px;
+  background:var(--panel-alt);
+}
+.rc3-same-semester-section h3{
+  margin-top:0!important;
+}
+.rc3-same-semester-note{
+  border-left:3px solid var(--accent);
+  padding:7px 8px;
+  margin:6px 0 8px;
+  border-radius:6px;
+  background:color-mix(in srgb,var(--accent) 8%,var(--panel));
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.5;
+}
+.rc3-same-semester-list{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.rc3-same-semester-item{
+  width:100%;
+  text-align:left;
+  border:1px dashed var(--border);
+  border-left:4px solid var(--same-semester-color,var(--accent));
+  border-radius:9px;
+  padding:8px;
+  background:var(--panel);
+  color:var(--text);
+}
+.rc3-same-semester-item:hover{
+  border-color:var(--accent);
+  box-shadow:0 3px 12px color-mix(in srgb,var(--accent) 12%,transparent);
+}
+.rc3-same-semester-item b{display:block;font-size:10px}
+.rc3-same-semester-item small{display:block;color:var(--muted);margin-top:3px}
+.rc3-same-semester-item .related-codes{margin-top:5px}
+.rc3-technical-pass{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  border:1px solid var(--success);
+  border-radius:999px;
+  padding:3px 7px;
+  color:var(--success);
+  font-size:9px;
+  font-weight:850;
+}
+html[data-theme='dark'] .same-semester-badge{background:var(--panel)}
