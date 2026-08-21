@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - trajectory-standard-v1.1
+  pull_request:
+    branches:
+      - main
 permissions:
   contents: write
 jobs:
@@ -28,6 +31,7 @@ jobs:
           unzip -t build_standard_v1_1/TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.zip
 
       - name: Publish stable release assets
+        if: github.event_name == 'push'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
