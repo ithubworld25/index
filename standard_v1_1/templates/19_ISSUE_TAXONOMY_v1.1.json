@@ -1,0 +1,68 @@
+{
+  "version": "1.1.0",
+  "types": {
+    "methodological": {
+      "label": "Нарушение методического правила",
+      "icon": "!",
+      "active_color": "red"
+    },
+    "source_mismatch": {
+      "label": "Расхождение источников",
+      "icon": "≠",
+      "active_color": "amber"
+    },
+    "mapping_ambiguity": {
+      "label": "Неоднозначность сопоставления",
+      "icon": "?",
+      "active_color": "violet"
+    },
+    "import_technical": {
+      "label": "Техническая проблема импорта",
+      "icon": "⚙",
+      "active_color": "indigo"
+    }
+  },
+  "priority": ["P0", "P1", "P2"],
+  "statuses": {
+    "open": {
+      "label": "Открыта",
+      "visual": "active type color"
+    },
+    "fixed_external": {
+      "label": "Исправлена во внешнем источнике",
+      "visual": "gray"
+    },
+    "normalized": {
+      "label": "Нормализована по решению",
+      "visual": "gray"
+    },
+    "not_relevant": {
+      "label": "Не актуальна",
+      "visual": "gray"
+    }
+  },
+  "manual_close_requires_comment": true,
+  "registry_behavior": {
+    "layout": "in_place_accordion",
+    "preserve_order": true,
+    "one_expanded_at_a_time": true,
+    "selected_row_highlight": true,
+    "normalized_group": "collapsible"
+  },
+  "map_context_sets": [
+    "primary_node_ids",
+    "existing_node_ids",
+    "candidate_node_ids",
+    "related_node_ids"
+  ],
+  "candidate_nodes_are_errors": false,
+  "status_persistence": {
+    "local": "localStorage",
+    "portable": "trajectory-issue-statuses-v1 JSON",
+    "compatibility_checks": [
+      "program_profile_id",
+      "academic_year",
+      "source_manifest_hash"
+    ]
+  }
+}

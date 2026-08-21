@@ -1,0 +1,42 @@
+{
+  "suite_id": "trajectory-functional-conformance",
+  "version": "0.9.0-rc1",
+  "blocking": true,
+  "tests": [
+    {"id":"CATALOG-01","action":"load candidate profile","assert":"number and labels of group blocks equal profile groups"},
+    {"id":"CATALOG-02","action":"run pure helper against alternate catalog/group fixture","assert":"no fixed competency count or group names are required"},
+    {"id":"GROUP-01","action":"enable hard then soft group","assert":"both groups remain active"},
+    {"id":"GROUP-02","action":"disable hard group","assert":"soft group remains active"},
+    {"id":"GROUP-03","action":"toggle one competency","assert":"individual and group state use one active set"},
+    {"id":"CARD-01","action":"clear active set","assert":"card exposes all assigned competency chips"},
+    {"id":"CARD-02","action":"select H-NET","assert":"card exposes only H-NET when assigned"},
+    {"id":"CARD-03","action":"select competency absent from a card","assert":"card remains in DOM and is dimmed"},
+    {"id":"ROLE-01","action":"select competencies and switch role","assert":"active competency set is preserved"},
+    {"id":"FOCUS-01","action":"clear filters and click a discipline with shared competencies","assert":"all shared competencies produce focus edges"},
+    {"id":"FOCUS-02","action":"select H-NET and click same discipline","assert":"all focus edges use H-NET only"},
+    {"id":"LINE-01","action":"focus a pair sharing multiple competencies","assert":"one path per shared competency with parallel offsets"},
+    {"id":"LINE-02","action":"inspect focus edges","assert":"no same-semester edge and every edge points from earlier to later semester"},
+    {"id":"LINE-03","action":"inspect group semantics","assert":"assessment_place lines are dashed and inheritance lines are solid"},
+    {"id":"ISSUE-01","action":"open source mismatch issue","assert":"role, semester/context and diagnostic panel are selected"},
+    {"id":"ISSUE-02","action":"open issue from discipline panel and registry","assert":"same issue_id is used"},
+    {"id":"ISSUE-03","action":"attempt manual fixed status with empty comment","assert":"operation is blocked"},
+    {"id":"ISSUE-04","action":"close with comment then reopen","assert":"status history retains both operations"},
+    {"id":"ISSUE-05","action":"edit data so a dynamic rule passes","assert":"issue becomes fixed automatically"},
+    {"id":"ISSUE-06","action":"undo edit or create recurrence","assert":"issue reopens automatically"},
+    {"id":"EDIT-01","action":"preview shared realization scope","assert":"targets include all roles sharing shared_key"},
+    {"id":"EDIT-02","action":"apply competency edit","assert":"cards, lines and issues are recalculated"},
+    {"id":"EDIT-03","action":"undo last competency edit","assert":"previous assignments are restored and revalidated"},
+    {"id":"SESSION-01","action":"save and load session","assert":"roles, assignments, issue states, filters, focus, theme and log are restored"},
+    {"id":"SESSION-02","action":"alter catalog hash","assert":"incompatible session is rejected"},
+    {"id":"EXPORT-01","action":"generate session, snapshot, change log and issue export","assert":"four schema identifiers differ"},
+    {"id":"THEME-01","action":"run light and dark modes","assert":"normal text contrast >=4.5 and UI contrast >=3"},
+    {"id":"FIT-01","action":"enable FIT","assert":"board scale is computed from available width and all semester columns remain accessible"},
+    {"id":"AUTONOMY-01","action":"open START.html locally","assert":"no external scripts, JSON, CSS or fetch calls are required"}
+  ],
+  "release_gate": {
+    "all_blocking_tests_pass": true,
+    "browser_smoke_required": true,
+    "light_and_dark_required": true,
+    "team_acceptance_required_for_v1": true
+  }
+}

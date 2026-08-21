@@ -1,0 +1,59 @@
+{
+  "profile_version": "1.0.0",
+  "specialty_code": "<code_or_null>",
+  "specialty": "<full_name>",
+  "direction": "<direction_or_null>",
+  "academic_year": "<YYYY-YYYY>",
+  "semesters": 8,
+  "business_roles": [
+    {
+      "id": "role_1",
+      "label": "<role_label>",
+      "full_name": "<full_name_or_null>",
+      "parent_direction": "<direction_or_null>"
+    }
+  ],
+  "competency_groups": [
+    {
+      "id": "internal_hard",
+      "label": "Внутренние hard",
+      "semantics": "inheritance",
+      "line_style": "solid"
+    },
+    {
+      "id": "soft",
+      "label": "Soft Skills",
+      "semantics": "assessment_places",
+      "line_style": "dashed"
+    },
+    {
+      "id": "ok_fgos",
+      "label": "ОК ФГОС",
+      "semantics": "inheritance",
+      "line_style": "solid"
+    },
+    {
+      "id": "pk_fgos",
+      "label": "ПК ФГОС",
+      "semantics": "inheritance",
+      "line_style": "solid"
+    }
+  ],
+  "validation_profile": {
+    "hard_group_id": "internal_hard",
+    "hard_required_minimum": 1,
+    "hard_exceptions": ["zero_hours", "physical_education"],
+    "soft_group_id": "soft",
+    "soft_minimum_disciplines": 3,
+    "soft_checked_semesters": [1, 2, 3, 4, 5, 6],
+    "soft_exclude_zero_hours": true
+  },
+  "code_identity_rule": "informational_only",
+  "practice_and_assessment_nodes": {
+    "include_if_present_in_joint_plan": true,
+    "draw_competency_lines_only_if_explicit": true
+  },
+  "program_specific_exceptions": [],
+  "confirmed_aliases": [],
+  "manual_continuations": []
+}

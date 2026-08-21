@@ -1,0 +1,9 @@
+{
+  "package": "TRAJECTORY_FUNCTIONAL_REFERENCE",
+  "version": "0.9.0-rc2",
+  "status": "failure",
+  "recorded_at": "2026-08-19T16:20:18.179797+00:00",
+  "workflow_run_id": "32275318061",
+  "commit_sha": "0cfd4ede97d88e41e7a02e9795adbb3ce09d0bbd",
+  "workflow_url": "https://github.com/ithubworld25/index/actions/runs/32275318061"
+}

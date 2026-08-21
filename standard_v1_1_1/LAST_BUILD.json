@@ -1,0 +1,33 @@
+{
+  "status": "success",
+  "created_at": "2026-08-21T12:33:10+00:00",
+  "all_tests_pass": true,
+  "functional_reference": {
+    "file": "TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.1.zip",
+    "size": 68891,
+    "sha256": "1736e4bf93bca9dcad767fd62d329d26fe1a8952441f7ff451fca827d87d1a10"
+  },
+  "standard": {
+    "file": "STANDARD_TRAJECTORY_VISUALIZATION_v1.1.1.zip",
+    "size": 62858,
+    "sha256": "b9657d46111205f7b05a1e378232bcbbab827503d48c2d307ea50438d140b759"
+  },
+  "system": {
+    "file": "TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.1.zip",
+    "size": 175990,
+    "sha256": "d1331d7388766d1fad73e168b181e67f25d20b5fda379d559404d6a23b04d0d7"
+  },
+  "functional_start_sha256": "68b47d8e90bdb8d626a3d811cb338a315d1577841e6b055988678dbcd58cebb0",
+  "functional_core_sha256": "7e880f3f1a416ff78097285d87eaabc4e3c41bae091d68db35d6849419de68eb",
+  "workflow_run_id": "32482399989",
+  "commit_sha": "c504ff8d7562697e0677be73a7c06e1667d52740",
+  "release_url": "https://github.com/ithubworld25/index/releases/tag/trajectory-visualization-system-v1.1.1",
+  "system_download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.1.zip",
+  "standard_download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/STANDARD_TRAJECTORY_VISUALIZATION_v1.1.1.zip",
+  "functional_reference_download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.1.zip",
+  "full_prompt_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/02_FULL_GENERATION_PROMPT_RU_v1.1.1.md",
+  "short_prompt_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/03_SHORT_LAUNCH_PROMPT_RU_v1.1.1.txt",
+  "core_verifier_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/verify_functional_core.py",
+  "verification_report_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/VERIFICATION_REPORT_v1.1.1.md",
+  "p0_resolution_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1.1/P0_CORE_01_RESOLUTION.md"
+}

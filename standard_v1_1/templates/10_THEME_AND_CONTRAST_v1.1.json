@@ -1,0 +1,72 @@
+{
+  "version": "1.1.0",
+  "targets": {
+    "normal_text": 4.5,
+    "large_text_and_ui": 3.0
+  },
+  "light": {
+    "bg": "#F3F5F8",
+    "panel": "#FFFFFF",
+    "panel_alt": "#F8FAFC",
+    "text": "#172033",
+    "muted": "#536174",
+    "subtle": "#667085",
+    "border": "#94A3B8",
+    "input_bg": "#FFFFFF",
+    "accent": "#2563EB",
+    "danger_text": "#991B1B",
+    "danger_bg": "#FEE2E2",
+    "warning_text": "#854D0E",
+    "warning_bg": "#FEF3C7",
+    "mapping_text": "#6D28D9",
+    "mapping_bg": "#EDE9FE",
+    "technical_text": "#1D4ED8",
+    "technical_bg": "#DBEAFE",
+    "normalized_text": "#475569",
+    "normalized_bg": "#E2E8F0",
+    "disabled_text": "#667085",
+    "placeholder": "#667085"
+  },
+  "dark": {
+    "bg": "#070B14",
+    "panel": "#0F172A",
+    "panel_alt": "#111C30",
+    "text": "#F8FAFC",
+    "muted": "#CBD5E1",
+    "subtle": "#A8B3C7",
+    "border": "#64748B",
+    "input_bg": "#111827",
+    "accent": "#60A5FA",
+    "danger_text": "#FCA5A5",
+    "danger_bg": "#3F151B",
+    "warning_text": "#FCD34D",
+    "warning_bg": "#3A2A0A",
+    "mapping_text": "#C4B5FD",
+    "mapping_bg": "#2E1A55",
+    "technical_text": "#93C5FD",
+    "technical_bg": "#142B52",
+    "normalized_text": "#E2E8F0",
+    "normalized_bg": "#334155",
+    "disabled_text": "#94A3B8",
+    "placeholder": "#A8B3C7"
+  },
+  "competency_colors": {
+    "rule": "Один competency_id сохраняет hue во всех семестрах, БР и темах; в тёмной теме допускается повышение lightness",
+    "light_theme_recommended_lightness_percent": [38, 48],
+    "dark_theme_recommended_lightness_percent": [64, 76],
+    "chip_text_or_border_minimum": 3.0,
+    "never": "Цвет не является единственным носителем смысла"
+  },
+  "required_manual_checks": [
+    "основной текст",
+    "вторичный и служебный текст",
+    "placeholder и disabled",
+    "кнопки и поля",
+    "вкладки",
+    "карточки дисциплин",
+    "аккордеон проблем",
+    "серые нормализованные статусы",
+    "метки компетенций",
+    "линии на фоне карты"
+  ]
+}

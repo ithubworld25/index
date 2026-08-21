@@ -1,0 +1,153 @@
+{
+  "standard_id": "trajectory-visualization-standard",
+  "version": "1.0.0",
+  "language": "ru",
+  "purpose": "Воспроизводимое создание автономных интерактивных визуализаций образовательной траектории для одной специальности и нескольких бизнес-ролей",
+  "scope": {
+    "required_input_families": [
+      "УП ФГОС",
+      "стыковочный УП",
+      "матрицы компетенций"
+    ],
+    "supported_semesters": "dynamic",
+    "supported_business_roles": "one_or_more",
+    "output": "single_verified_zip"
+  },
+  "isolation": {
+    "rule": "Использовать предметные данные только из файлов, явно прикреплённых в текущем чате и перечисленных во входном манифесте",
+    "forbidden": [
+      "подмешивать дисциплины, компетенции, часы или исключения из других чатов проекта",
+      "использовать демонстрационные данные стандарта как данные программы",
+      "молча переносить ручные сопоставления между специальностями"
+    ]
+  },
+  "source_priority": [
+    {
+      "priority": 1,
+      "source": "стыковочный_уп",
+      "role": "Единственный источник узлов карты, отображаемых названий, семестров, фактических часов и внутреннего разбиения дисциплин"
+    },
+    {
+      "priority": 2,
+      "source": "матрица_компетенций",
+      "role": "Источник компетенций, коэффициентов и мест оценивания Soft Skills"
+    },
+    {
+      "priority": 3,
+      "source": "уп_фгос",
+      "role": "Нормативный контур, официальная основа и подтверждение продолжения дисциплин между семестрами; не создаёт альтернативную карту"
+    }
+  ],
+  "entity_model": {
+    "canonical_discipline": "Стабильная сущность дисциплины",
+    "discipline_realization": "Экземпляр дисциплины в конкретных семестре, роли/ветке, учебном году и версии плана",
+    "competency": "Сущность единого каталога компетенций программы",
+    "discipline_competency": "Связь реализации дисциплины с компетенцией и коэффициентом",
+    "continuation": "Подтверждённая связь одной дисциплинарной линии между семестрами",
+    "issue": "Диагностическая запись с правилом, источниками, точкой карты и статусом"
+  },
+  "mapping": {
+    "code_default": "informational_only",
+    "automatic_exact_name": true,
+    "automatic_normalized_name": true,
+    "approximate_name": "warning_only",
+    "split_merge": "explicit_mapping_only",
+    "fgos_unmapped": "not_an_error_by_itself"
+  },
+  "competency_groups": {
+    "configurable": true,
+    "required_operations": [
+      "show_all_group",
+      "hide_all_group",
+      "individual_toggle"
+    ],
+    "soft_semantics": "assessment_places_not_inheritance"
+  },
+  "card_behavior": {
+    "no_selection": "show_all_assigned_competencies",
+    "active_selection": "show_only_selected_assigned_competencies",
+    "discipline_focus": "preserve_active_selection",
+    "no_selected_competency_on_card": "keep_card_and_dim"
+  },
+  "line_behavior": {
+    "selected_competencies_only": true,
+    "stable_color_per_competency": true,
+    "soft_line": "dashed",
+    "continuation_line": "neutral_gray",
+    "discipline_focus": "one_parallel_colored_line_per_shared_active_competency"
+  },
+  "issues": {
+    "clickable_registry": true,
+    "click_action": [
+      "switch_role",
+      "focus_semester",
+      "focus_node_or_context",
+      "open_full_diagnostic"
+    ],
+    "statuses": {
+      "open": "red",
+      "warning": "yellow",
+      "fixed": "gray",
+      "not_relevant": "gray"
+    },
+    "manual_close_requires_comment": true,
+    "automatic_fixed_when_validation_passes": true,
+    "node_counters": [
+      "active_red",
+      "normalized_gray"
+    ]
+  },
+  "editing": {
+    "mode": "local_prototype",
+    "editable": [
+      "competency_assignment",
+      "coefficient",
+      "issue_status",
+      "issue_comment"
+    ],
+    "scope_options": [
+      "current_realization",
+      "shared_realization",
+      "all_canonical_realizations"
+    ],
+    "revalidate_after_change": true,
+    "autosave": "localStorage",
+    "portable_session_json": true,
+    "exports": [
+      "full_snapshot_json",
+      "change_log_json",
+      "single_issue_json"
+    ],
+    "direct_excel_writeback": false
+  },
+  "theme": {
+    "modes": [
+      "system",
+      "light",
+      "dark"
+    ],
+    "stable_competency_identity": true,
+    "normal_text_min_contrast": 4.5,
+    "large_text_and_ui_min_contrast": 3.0,
+    "dark_mode_contrast_test_required": true
+  },
+  "final_package": {
+    "start_file": "START.html",
+    "start_file_at_zip_root": true,
+    "start_file_autonomous": true,
+    "external_dependencies_forbidden": true,
+    "required_files": [
+      "START.html",
+      "README.md",
+      "НОРМАЛИЗОВАННЫЕ_ДАННЫЕ.json",
+      "ПРИМЕНЁННЫЕ_ПРАВИЛА.json",
+      "РЕЕСТР_ОШИБОК.json",
+      "РЕЕСТР_ИСПРАВЛЕНИЙ.json",
+      "АУДИТ_ИСТОЧНИКОВ.md",
+      "ОТКРЫТЫЕ_ВОПРОСЫ.md",
+      "ПРОФИЛЬ_ПРОГРАММЫ.json",
+      "PACKAGE_MANIFEST.json",
+      "ПРОТОКОЛ_ПРОВЕРКИ.txt"
+    ]
+  }
+}

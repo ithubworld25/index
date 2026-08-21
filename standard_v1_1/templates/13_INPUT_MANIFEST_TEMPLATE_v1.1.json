@@ -1,0 +1,25 @@
+{
+  "manifest_id": "<specialty>-<academic_year>-input",
+  "version": "1.1.0",
+  "target_academic_year": "",
+  "specialty": {
+    "code": "",
+    "name": "",
+    "direction": ""
+  },
+  "business_roles": [],
+  "files": [
+    {
+      "file_name": "",
+      "sha256": "",
+      "source_role": "joint_plan|competency_matrix|fgos_plan|mapping_dictionary",
+      "business_role": "",
+      "sheets_used": [],
+      "academic_year_found": "",
+      "notes": ""
+    }
+  ],
+  "blocking_questions": [],
+  "decisions": [],
+  "excluded_files": []
+}

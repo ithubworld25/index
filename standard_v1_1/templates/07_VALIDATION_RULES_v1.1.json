@@ -1,0 +1,61 @@
+{
+  "version": "1.1.0",
+  "coefficient": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 4,
+    "scope": "discipline_realization",
+    "sum_across_disciplines": false
+  },
+  "hard_requirement": {
+    "enabled_by_program_profile": true,
+    "default_minimum_per_positive_hour_discipline": 1,
+    "target_group_ids": "from_program_profile",
+    "exceptions": [
+      "zero_hours",
+      "physical_education"
+    ]
+  },
+  "soft_distribution": {
+    "enabled_by_program_profile": true,
+    "target_group_ids": "from_program_profile",
+    "default_minimum_distinct_disciplines": 3,
+    "default_semesters": [1, 2, 3, 4, 5, 6],
+    "exclude_zero_hours": true,
+    "coefficient_does_not_multiply_places": true,
+    "fourth_course_excluded_by_default": true
+  },
+  "issue_required_fields": [
+    "issue_id",
+    "type",
+    "priority",
+    "status",
+    "rule_id",
+    "short_message",
+    "full_description",
+    "current_state",
+    "expected_state",
+    "required_action",
+    "source_refs",
+    "role_ids",
+    "semester_ids",
+    "primary_node_ids",
+    "existing_node_ids",
+    "candidate_node_ids",
+    "related_node_ids"
+  ],
+  "issue_types": [
+    "methodological",
+    "source_mismatch",
+    "mapping_ambiguity",
+    "import_technical"
+  ],
+  "issue_priorities": ["P0", "P1", "P2"],
+  "manual_statuses": [
+    "fixed_external",
+    "normalized",
+    "not_relevant"
+  ],
+  "manual_close_requires_comment": true,
+  "candidate_nodes_are_not_counted_as_errors": true
+}

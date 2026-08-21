@@ -1,0 +1,48 @@
+{
+  "profile_id": "<specialty_code>-<academic_year>",
+  "version": "1.1.0",
+  "specialty": {
+    "code": "",
+    "name": "",
+    "direction": "",
+    "academic_year": ""
+  },
+  "roles": [
+    {
+      "id": "role_1",
+      "label": "БР 1"
+    }
+  ],
+  "groups": [
+    {
+      "id": "group_1",
+      "label": "Группа 1",
+      "relation_semantics": "inheritance|assessment_place|reference",
+      "line_style": "solid|dashed|none",
+      "inheritance": true
+    }
+  ],
+  "validation": {
+    "coefficient": {
+      "min": 1,
+      "max": 4
+    },
+    "hard_requirement": {
+      "enabled": true,
+      "competency_group_ids": [],
+      "minimum_per_positive_hour_discipline": 1,
+      "exceptions": ["zero_hours", "physical_education"]
+    },
+    "soft_distribution": {
+      "enabled": true,
+      "competency_group_ids": [],
+      "minimum_disciplines_per_semester": 3,
+      "semester_range": [1, 6],
+      "exclude_zero_hours": true
+    }
+  },
+  "ui_labels": {
+    "issues_panel": "Проблемы и расхождения"
+  },
+  "feature_profile_file": "20_FEATURE_PROFILE_v1.1.json"
+}
