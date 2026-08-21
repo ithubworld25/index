@@ -3,9 +3,13 @@ on:
   push:
     branches:
       - trajectory-standard-v1.1
+    paths-ignore:
+      - standard_v1_1/LAST_BUILD.json
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - standard_v1_1/LAST_BUILD.json
 permissions:
   contents: write
 jobs:
@@ -88,3 +92,32 @@ jobs:
             build_standard_v1_1/standard_v1_1/AUTOTEST_RESULTS_v1.1.json
           retention-days: 14
           compression-level: 0
+
+      - name: Record stable release metadata
+        if: github.event_name == 'push'
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, os
+          result = json.loads(Path('build_standard_v1_1/BUILD_RESULT.json').read_text(encoding='utf-8'))
+          base = 'https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/'
+          result.update({
+              'workflow_run_id': os.environ['GITHUB_RUN_ID'],
+              'commit_sha': os.environ['GITHUB_SHA'],
+              'release_url': 'https://github.com/ithubworld25/index/releases/tag/trajectory-visualization-system-v1.1',
+              'system_download_url': base + 'TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.zip',
+              'standard_download_url': base + 'STANDARD_TRAJECTORY_VISUALIZATION_v1.1.zip',
+              'functional_reference_download_url': base + 'TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip',
+              'full_prompt_url': base + '02_FULL_GENERATION_PROMPT_RU_v1.1.md',
+              'short_prompt_url': base + '03_SHORT_LAUNCH_PROMPT_RU_v1.1.txt',
+              'verification_report_url': base + 'VERIFICATION_REPORT_v1.1.md'
+          })
+          Path('standard_v1_1/LAST_BUILD.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(result, ensure_ascii=False))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add standard_v1_1/LAST_BUILD.json
+          git commit -m 'Record verified trajectory visualization system v1.1 release [skip ci]'
+          git push origin HEAD:refs/heads/trajectory-standard-v1.1
