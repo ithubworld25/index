@@ -56,6 +56,7 @@ jobs:
             build_standard_v1_1/standard_v1_1/11_FINAL_PACKAGE_CONTRACT_v1.1.json
             build_standard_v1_1/standard_v1_1/18_FUNCTIONAL_CORE_MANIFEST_v1.0.json
             build_standard_v1_1/standard_v1_1/FUNCTIONAL_CORE_TEMPLATE_v1.0.html
+            build_standard_v1_1/standard_v1_1/verify_functional_core.py
             build_standard_v1_1/standard_v1_1/VERIFICATION_REPORT_v1.1.md
             build_standard_v1_1/standard_v1_1/AUTOTEST_RESULTS_v1.1.json
           )
@@ -88,6 +89,7 @@ jobs:
             build_standard_v1_1/standard_v1_1/11_FINAL_PACKAGE_CONTRACT_v1.1.json
             build_standard_v1_1/standard_v1_1/18_FUNCTIONAL_CORE_MANIFEST_v1.0.json
             build_standard_v1_1/standard_v1_1/FUNCTIONAL_CORE_TEMPLATE_v1.0.html
+            build_standard_v1_1/standard_v1_1/verify_functional_core.py
             build_standard_v1_1/standard_v1_1/VERIFICATION_REPORT_v1.1.md
             build_standard_v1_1/standard_v1_1/AUTOTEST_RESULTS_v1.1.json
           retention-days: 14
@@ -111,6 +113,7 @@ jobs:
               'functional_reference_download_url': base + 'TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip',
               'full_prompt_url': base + '02_FULL_GENERATION_PROMPT_RU_v1.1.md',
               'short_prompt_url': base + '03_SHORT_LAUNCH_PROMPT_RU_v1.1.txt',
+              'core_verifier_url': base + 'verify_functional_core.py',
               'verification_report_url': base + 'VERIFICATION_REPORT_v1.1.md'
           })
           Path('standard_v1_1/LAST_BUILD.json').write_text(json.dumps(result, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
