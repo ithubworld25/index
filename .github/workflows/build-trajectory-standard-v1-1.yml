@@ -25,6 +25,7 @@ jobs:
       - name: Build functional reference v1.0 and standard v1.1
         run: |
           set -euo pipefail
+          python3 standard_v1_1/patch_build.py
           python3 standard_v1_1/build_system.py
           unzip -t build_standard_v1_1/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip
           unzip -t build_standard_v1_1/STANDARD_TRAJECTORY_VISUALIZATION_v1.1.zip
