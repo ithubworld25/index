@@ -1,0 +1,43 @@
+name: test-trajectory-standard-v1-1-1-pr
+on:
+  pull_request:
+    branches:
+      - main
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build RC2 source
+        run: |
+          set -euo pipefail
+          python3 reference_candidate_rc2/patch_builder.py
+          python3 reference_candidate_rc2/build_rc2.py
+      - name: Prepare and validate hotfix
+        run: |
+          set -euo pipefail
+          python3 standard_v1_1_1/prepare_hotfix.py
+          cp standard_v1_1/core_tools.py standard_v1_1_1/core_tools.py
+          python3 standard_v1_1_1/post_patch.py
+          python3 -m py_compile standard_v1_1_1/*.py
+          python3 standard_v1_1_1/build_system.py
+          unzip -t build_standard_v1_1_1/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.1.zip
+          unzip -t build_standard_v1_1_1/STANDARD_TRAJECTORY_VISUALIZATION_v1.1.1.zip
+          unzip -t build_standard_v1_1_1/TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.1.zip
+          python3 build_standard_v1_1_1/standard_v1_1_1/verify_functional_core.py \
+            build_standard_v1_1_1/standard_v1_1_1/FUNCTIONAL_CORE_TEMPLATE_v1.0.1.html \
+            build_standard_v1_1_1/standard_v1_1_1/18_FUNCTIONAL_CORE_MANIFEST_v1.0.1.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.1_PR_TEST
+          path: |
+            build_standard_v1_1_1/*.zip
+            build_standard_v1_1_1/*.json
+            build_standard_v1_1_1/*.txt
+            build_standard_v1_1_1/standard_v1_1_1/VERIFICATION_REPORT_v1.1.1.md
+            build_standard_v1_1_1/standard_v1_1_1/AUTOTEST_RESULTS_v1.1.1.json
+            build_standard_v1_1_1/standard_v1_1_1/10_CONTRAST_TEST_RESULTS_v1.1.1.json
+          retention-days: 7
+          compression-level: 0
