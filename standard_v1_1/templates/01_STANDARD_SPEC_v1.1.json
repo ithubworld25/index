@@ -1,0 +1,112 @@
+{
+  "standard_id": "trajectory-visualization-standard",
+  "version": "1.1.0",
+  "functional_core_version": "1.0.0",
+  "language": "ru",
+  "purpose": "Воспроизводимое создание автономных визуализаций одной специальности с одной или несколькими бизнес-ролями",
+  "isolation": {
+    "rule": "Предметные данные берутся только из файлов текущего чата, перечисленных во входном манифесте",
+    "forbidden": [
+      "перенос дисциплин, часов, компетенций, бизнес-ролей и исключений из других специальностей",
+      "использование демонстрационных данных эталона как данных программы",
+      "молчаливое исправление источников"
+    ]
+  },
+  "source_priority": [
+    {
+      "priority": 1,
+      "source": "joint_plan",
+      "role": "узлы карты, отображаемые названия, семестры, фактические часы и внутреннее разбиение"
+    },
+    {
+      "priority": 2,
+      "source": "competency_matrix",
+      "role": "компетенции, коэффициенты и места оценивания Soft Skills"
+    },
+    {
+      "priority": 3,
+      "source": "fgos_plan",
+      "role": "нормативный контур и подтверждение продолжений; не создаёт альтернативную карту"
+    }
+  ],
+  "catalog": {
+    "dynamic_per_specialty": true,
+    "shared_within_specialty": true,
+    "isolated_between_specialties": true,
+    "fixed_number_of_groups_forbidden": true
+  },
+  "identity": {
+    "shared_realization_across_roles": "same normalized name + same semester + same actual hours",
+    "canonical_discipline_across_semesters": "same normalized name unless explicit exception",
+    "code_default": "informational_only",
+    "split_merge": "explicit_mapping_only"
+  },
+  "competency_modes": {
+    "competency_only": {
+      "matching_cards": "full_contrast",
+      "non_matching_cards": "dim",
+      "card_labels": "selected_assigned_only",
+      "competency_lines": "none",
+      "meaning": "presence of competency, not prerequisite sequence"
+    },
+    "discipline_focus": {
+      "selected_card": "primary_focus",
+      "related_cards": "explicit_highlight",
+      "unrelated_cards": "dim",
+      "lines": "one colored line per shared active competency",
+      "same_semester_lines": false,
+      "meaning": "shared competency only, not prerequisite/postrequisite"
+    }
+  },
+  "line_semantics": {
+    "stable_color_per_competency": true,
+    "coefficient_affects_width": true,
+    "soft": "dashed assessment place",
+    "continuation": "neutral gray"
+  },
+  "issues": {
+    "registry": "in-place accordion preserving list order",
+    "types": [
+      "methodological",
+      "source_mismatch",
+      "mapping_ambiguity",
+      "import_technical"
+    ],
+    "priority": ["P0", "P1", "P2"],
+    "statuses": [
+      "open",
+      "fixed_external",
+      "normalized",
+      "not_relevant"
+    ],
+    "manual_close_requires_comment": true,
+    "status_persistence": ["localStorage", "portable_status_json"],
+    "semester_level_context": true,
+    "candidate_nodes_are_not_errors": true
+  },
+  "default_features": {
+    "discipline_editing": false,
+    "competency_editing": false,
+    "coefficient_editing": false,
+    "portable_full_session": false,
+    "full_snapshot_export": false,
+    "change_log_export": false,
+    "issue_status_change": true,
+    "issue_status_comment": true,
+    "issue_status_return_to_work": true,
+    "issue_status_local_storage": true,
+    "issue_status_import_export": true
+  },
+  "theme": {
+    "modes": ["system", "light", "dark"],
+    "normal_text_min_contrast": 4.5,
+    "large_text_and_ui_min_contrast": 3.0,
+    "competency_hue_stable": true
+  },
+  "reset_actions": [
+    "clear_competencies",
+    "clear_discipline_focus",
+    "clear_all_highlighting"
+  ],
+  "final_output": "single verified ZIP with autonomous START.html at root"
+}
