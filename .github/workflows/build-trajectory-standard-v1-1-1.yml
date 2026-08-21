@@ -26,7 +26,8 @@ jobs:
           set -euo pipefail
           python3 standard_v1_1_1/prepare_hotfix.py
           cp standard_v1_1/core_tools.py standard_v1_1_1/core_tools.py
-          python3 -m py_compile standard_v1_1_1/prepare_hotfix.py standard_v1_1_1/build_system.py standard_v1_1_1/core_tools.py
+          python3 standard_v1_1_1/post_patch.py
+          python3 -m py_compile standard_v1_1_1/prepare_hotfix.py standard_v1_1_1/post_patch.py standard_v1_1_1/build_system.py standard_v1_1_1/core_tools.py
 
       - name: Build functional core v1.0.1 and standard v1.1.1
         run: |
