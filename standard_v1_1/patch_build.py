@@ -17,5 +17,15 @@ for old, new in replacements.items():
         raise SystemExit(f"build patch marker not found: {old}")
     source = source.replace(old, new, 1)
 
+core_key_marker = '            "FUNCTIONAL_CORE_TEMPLATE_v1.0.html"\n'
+if source.count(core_key_marker) != 1:
+    raise SystemExit(f"unexpected core manifest key marker count: {source.count(core_key_marker)}")
+source = source.replace(core_key_marker, '            "FUNCTIONAL_CORE_TEMPLATE_v1.0.html",\n            "verify_functional_core.py"\n', 1)
+
+system_key_marker = '        "FUNCTIONAL_CORE_TEMPLATE_v1.0.html",\n        "VERIFICATION_REPORT_v1.1.md"'
+if system_key_marker not in source:
+    raise SystemExit("system key files marker not found")
+source = source.replace(system_key_marker, '        "FUNCTIONAL_CORE_TEMPLATE_v1.0.html",\n        "verify_functional_core.py",\n        "VERIFICATION_REPORT_v1.1.md"', 1)
+
 path.write_text(source, encoding="utf-8")
-print({"patched": list(replacements), "file": str(path)})
+print({"patched": list(replacements) + ["core verifier key files"], "file": str(path)})
