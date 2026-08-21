@@ -1,0 +1,31 @@
+{
+  "status": "success",
+  "created_at": "2026-08-21T08:10:24+00:00",
+  "all_tests_pass": true,
+  "functional_reference": {
+    "file": "TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip",
+    "size": 68357,
+    "sha256": "b4b85af3abf858d502bdfef786ada1e81f471e2840c66f68eed970405526f721"
+  },
+  "standard": {
+    "file": "STANDARD_TRAJECTORY_VISUALIZATION_v1.1.zip",
+    "size": 60007,
+    "sha256": "e5c52b4c3897a62096da3fae96819187c1abf0a82b86b3cf7a84ef19629fcbf7"
+  },
+  "system": {
+    "file": "TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.zip",
+    "size": 170283,
+    "sha256": "7ea8f36e97ebf287614a1f56e04f7137e4bd5d9f20ff34652e595399b61674b6"
+  },
+  "functional_start_sha256": "002115e57b46f038cfff8b2fb2b1c8959c944e48a3a2dbe41794adea91499b13",
+  "functional_core_sha256": "2746fe8fb5d10a3dbc204c490f9a406c7259b33a5d6245789690c4a64c7e2d98",
+  "workflow_run_id": "32461923718",
+  "commit_sha": "aaebf567b77ddc80b9ff7a8d892b6b016ce25fab",
+  "release_url": "https://github.com/ithubworld25/index/releases/tag/trajectory-visualization-system-v1.1",
+  "system_download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/TRAJECTORY_VISUALIZATION_SYSTEM_v1.1.zip",
+  "standard_download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/STANDARD_TRAJECTORY_VISUALIZATION_v1.1.zip",
+  "functional_reference_download_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/TRAJECTORY_FUNCTIONAL_REFERENCE_v1.0.zip",
+  "full_prompt_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/02_FULL_GENERATION_PROMPT_RU_v1.1.md",
+  "short_prompt_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/03_SHORT_LAUNCH_PROMPT_RU_v1.1.txt",
+  "verification_report_url": "https://github.com/ithubworld25/index/releases/download/trajectory-visualization-system-v1.1/VERIFICATION_REPORT_v1.1.md"
+}
