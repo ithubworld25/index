@@ -1,0 +1,54 @@
+{
+  "version": "1.1.0",
+  "required_source_families": [
+    "fgos_plan",
+    "joint_plan",
+    "competency_matrix"
+  ],
+  "optional_source_families": [
+    "mapping_dictionary",
+    "program_profile_overrides"
+  ],
+  "excel_import": {
+    "strategy": "anchor_based_not_fixed_coordinates",
+    "joint_plan_anchors": [
+      "Дисциплины",
+      "Часы по ФГОС",
+      "Часы очной реализации"
+    ],
+    "competency_matrix_anchors": [
+      "Бизнес-роль",
+      "Семестр",
+      "Учебный год",
+      "Дисциплины",
+      "Часы"
+    ],
+    "merged_cells": "supported_with_explicit_normalization",
+    "blank_leading_columns": "allowed",
+    "formula_errors": "blocking_if_used_in_required_field"
+  },
+  "input_manifest_required_fields": [
+    "file_name",
+    "sha256",
+    "source_role",
+    "academic_year",
+    "specialty",
+    "business_role",
+    "sheets_used",
+    "notes"
+  ],
+  "blocking_conditions": [
+    "missing required source family",
+    "ambiguous target academic year",
+    "unreadable workbook",
+    "missing mandatory table anchors",
+    "cannot identify business role",
+    "multiple incompatible matrices without selection rule"
+  ],
+  "non_blocking_conditions": [
+    "source mismatch resolvable by source priority",
+    "approximate name match",
+    "unmapped FGOS row",
+    "technical normalization with preserved source value"
+  ]
+}
