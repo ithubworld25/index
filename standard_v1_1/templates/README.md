@@ -33,9 +33,20 @@ ZIP является резервным комплектом для челове
 4. `10_THEME_AND_CONTRAST_v1.1.json`;
 5. `11_FINAL_PACKAGE_CONTRACT_v1.1.json`;
 6. `18_FUNCTIONAL_CORE_MANIFEST_v1.0.json`;
-7. `FUNCTIONAL_CORE_TEMPLATE_v1.0.html`.
+7. `FUNCTIONAL_CORE_TEMPLATE_v1.0.html`;
+8. `verify_functional_core.py`.
 
 В новый чат прикладывайте комплект документов только одной специальности и вставляйте короткий пусковой промпт.
+
+## Проверка ядра
+
+После замены разрешённых предметных констант выполните:
+
+```bash
+python verify_functional_core.py START.html 18_FUNCTIONAL_CORE_MANIFEST_v1.0.json
+```
+
+Результат должен содержать `"match": true`. При несовпадении хеша финальный архив не формируется.
 
 ## Правило изменения ядра
 
