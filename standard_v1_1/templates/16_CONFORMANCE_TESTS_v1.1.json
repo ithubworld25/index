@@ -1,0 +1,81 @@
+{
+  "version": "1.1.0",
+  "required": [
+    {
+      "id": "CORE-01",
+      "test": "normalized functional core SHA-256 matches manifest"
+    },
+    {
+      "id": "CATALOG-01",
+      "test": "catalog and groups work with a second profile without changing core"
+    },
+    {
+      "id": "GROUP-01",
+      "test": "two groups can be active simultaneously"
+    },
+    {
+      "id": "GROUP-02",
+      "test": "disabling one group preserves all other active groups"
+    },
+    {
+      "id": "CARD-01",
+      "test": "no selection shows all assigned competency labels"
+    },
+    {
+      "id": "CARD-02",
+      "test": "active selection shows only selected assigned labels"
+    },
+    {
+      "id": "MODE-01",
+      "test": "competency-only mode highlights matching cards and draws no competency lines"
+    },
+    {
+      "id": "FOCUS-01",
+      "test": "discipline focus without filter shows all shared competency lines"
+    },
+    {
+      "id": "FOCUS-02",
+      "test": "discipline focus with filter limits lines to active competencies"
+    },
+    {
+      "id": "FOCUS-03",
+      "test": "related cards are highlighted and unrelated cards are dimmed"
+    },
+    {
+      "id": "LINE-01",
+      "test": "one line per shared competency, external card edges, no same-semester competency lines"
+    },
+    {
+      "id": "ISSUE-01",
+      "test": "issue accordion expands in the clicked list position"
+    },
+    {
+      "id": "ISSUE-02",
+      "test": "switching issue synchronizes row, diagnostic, role, semester and map context"
+    },
+    {
+      "id": "ISSUE-03",
+      "test": "manual close without comment is blocked"
+    },
+    {
+      "id": "STATUS-01",
+      "test": "status export/import validates profile, academic year and source manifest hash"
+    },
+    {
+      "id": "SEMESTER-01",
+      "test": "semester-level issue shows semester marker, existing and candidate nodes"
+    },
+    {
+      "id": "ZERO-01",
+      "test": "zero-hour nodes can be hidden and restored"
+    },
+    {
+      "id": "THEME-01",
+      "test": "light and dark browser smoke tests pass and contrast thresholds are met"
+    },
+    {
+      "id": "PACKAGE-01",
+      "test": "autonomous START.html at ZIP root and ZIP integrity pass"
+    }
+  ]
+}
