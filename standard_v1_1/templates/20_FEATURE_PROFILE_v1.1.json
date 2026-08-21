@@ -1,0 +1,25 @@
+{
+  "profile_id": "trajectory-default-review-workflow-v1",
+  "version": "1.1.0",
+  "features": {
+    "discipline_editing": false,
+    "competency_editing": false,
+    "coefficient_editing": false,
+    "portable_full_session": false,
+    "full_snapshot_export": false,
+    "change_log_export": false,
+    "single_issue_export": false,
+    "issue_status_change": true,
+    "issue_status_comment": true,
+    "issue_status_return_to_work": true,
+    "issue_status_local_storage": true,
+    "issue_status_import_export": true,
+    "system_theme": true,
+    "light_theme": true,
+    "dark_theme": true,
+    "zero_hour_filter": true,
+    "continuation_lines": true,
+    "semester_issue_context": true
+  },
+  "reason": "На текущем этапе изменения вносятся во внешние УП и матрицы; визуализация фиксирует просмотр и статус проблем, но не редактирует предметные данные"
+}

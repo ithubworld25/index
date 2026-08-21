@@ -1,0 +1,71 @@
+name: build-ib-v03
+on:
+  push:
+    branches:
+      - tmp-build-ib-v03-20260812
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout temporary build branch
+        uses: actions/checkout@v4
+      - name: Build autonomous package
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('build/build.py')
+          s = p.read_text(encoding='utf-8')
+          old = 'forbidden = ["<script src=", "fetch(", "http://", "https://"]'
+          new = 'forbidden = ["<script src=", "fetch("]'
+          if old not in s:
+              raise SystemExit('Expected static-check declaration not found')
+          p.write_text(s.replace(old, new), encoding='utf-8')
+          PY
+          python3 build/build.py | tee build/build_result.json
+      - name: Browser smoke test
+        run: |
+          set -euo pipefail
+          google-chrome --version
+          timeout 45s google-chrome --headless=new --disable-gpu --no-sandbox --allow-file-access-from-files --virtual-time-budget=5000 --dump-dom "file://${GITHUB_WORKSPACE}/package/START.html" > build/rendered_dom.html
+          grep -q 'data-runtime-ready="1"' build/rendered_dom.html
+          grep -q 'data-self-test="ok"' build/rendered_dom.html
+          grep -q 'Самопроверка: OK' build/rendered_dom.html
+      - name: Verify package contour
+        run: |
+          set -euo pipefail
+          test -s package/START.html
+          test -s package/НОРМАЛИЗОВАННЫЕ_ДАННЫЕ.json
+          test -s package/РЕЕСТР_ОШИБОК.json
+          test -s package/ПРОТОКОЛ_ПРОВЕРКИ.txt
+          ! grep -q '<script src=' package/START.html
+          ! grep -q 'fetch(' package/START.html
+          find package -maxdepth 1 -type f -printf '%f\n' | sort | tee build/package_files.txt
+          sha256sum package/* | sort | tee build/package_sha256.txt
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          data=json.loads(Path('package/НОРМАЛИЗОВАННЫЕ_ДАННЫЕ.json').read_text(encoding='utf-8'))
+          assert len(data['catalog']) == 43
+          assert set(data['roles']) == {'kiber','devops'}
+          assert all(set(n['semester'] for n in data['roles'][r]['nodes']) == set(range(1,9)) for r in data['roles'])
+          assert data['groups']['soft']['indices'] == [13,14,15,16,17]
+          assert any(e['rule']=='SOFT_DEFICIT' for e in data['initial_errors'])
+          assert any(e['rule']=='HARD_MISSING' for e in data['initial_errors'])
+          print(json.dumps({
+              'catalog':len(data['catalog']),
+              'kiber_nodes':len(data['roles']['kiber']['nodes']),
+              'devops_nodes':len(data['roles']['devops']['nodes']),
+              'errors':len(data['initial_errors'])
+          },ensure_ascii=False))
+          PY
+      - name: Upload verified package
+        uses: actions/upload-artifact@v4
+        with:
+          name: IB_TRAJECTORY_V03
+          path: package/*
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 9

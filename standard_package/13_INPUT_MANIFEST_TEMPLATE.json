@@ -1,0 +1,21 @@
+{
+  "manifest_version": "1.0.0",
+  "current_chat_only": true,
+  "academic_year": "<YYYY-YYYY>",
+  "specialty": "<full_name>",
+  "direction": "<direction_or_null>",
+  "files": [
+    {
+      "file_name": "<file.xlsx>",
+      "document_role": "joint_plan|competency_matrix|fgos_plan|other",
+      "business_roles": ["<role_id>"],
+      "version_status": "source|copy|draft|approved",
+      "source_priority": 1,
+      "included": true,
+      "notes": ""
+    }
+  ],
+  "excluded_project_files": [],
+  "blocking_questions_P0": [],
+  "audit_status": "draft|ready|blocked"
+}

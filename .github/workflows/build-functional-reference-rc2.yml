@@ -1,0 +1,10 @@
+name: build-functional-reference-rc2-legacy
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  notice:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: echo 'Legacy RC2 workflow disabled. Use build-functional-reference-rc2-final.'

@@ -1,0 +1,33 @@
+/* TRAJECTORY_FUNCTIONAL_REFERENCE v0.9-rc2 */
+.rc2-hidden{display:none!important}
+.rc2-focus-actions{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.rc2-action-button{font-size:9px;font-weight:800;padding:5px 8px}
+.rc2-notice,.rc2-status-info{border:1px solid var(--border);border-radius:9px;background:var(--panel-alt);color:var(--muted);font-size:9px;line-height:1.5;padding:7px;margin:7px 0}
+.rc2-common-block{border:1px solid color-mix(in srgb,var(--accent) 42%,var(--border));background:color-mix(in srgb,var(--accent) 8%,var(--panel));border-radius:9px;padding:8px;margin:8px 0;font-size:10px;line-height:1.55}
+.shared-badge{display:inline-flex;align-items:center;border:1px solid var(--accent);color:var(--accent);border-radius:999px;padding:1px 5px;font-weight:850;background:color-mix(in srgb,var(--accent) 8%,var(--panel))}
+.discipline.related-focus{opacity:1!important;border-color:var(--related-color)!important;box-shadow:0 0 0 3px color-mix(in srgb,var(--related-color) 28%,transparent),var(--shadow)!important}
+.discipline.focus-dim{opacity:.18!important;filter:saturate(.45)}
+.discipline.issue-context-dim{opacity:.18!important;filter:saturate(.45)}
+.discipline.selected,.discipline.issue-primary,.discipline.issue-existing,.discipline.issue-candidate,.discipline.issue-related{opacity:1!important;filter:none!important}
+.related-codes{display:flex;gap:3px;flex-wrap:wrap;margin-top:5px}
+.sem-head-row{display:flex;gap:6px;align-items:center;justify-content:space-between}
+.sem-issue-badge{display:inline-grid;place-items:center;min-width:21px;height:21px;padding:0 5px;border-radius:999px;background:var(--danger-bg);color:var(--danger);font-size:9px;font-weight:900}
+.semester.sem-issue{outline:3px solid var(--danger)}
+.semester.sem-issue.source_mismatch{outline-color:var(--warning)}
+.semester.sem-issue.mapping_ambiguity{outline-color:var(--mapping)}
+.semester.sem-issue.import_technical{outline-color:var(--technical)}
+.rc2-issue-summary,.rc2-type-legend,.rc2-status-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.rc2-type-legend{margin-bottom:7px}
+.rc2-accordion-list{display:flex;flex-direction:column;gap:7px}
+.issue-card.rc2-item{display:block;padding:0;overflow:hidden}
+.issue-card.rc2-item.expanded{box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 35%,transparent)}
+.issue-header{display:block;width:100%;border:0;border-radius:0;background:transparent;color:var(--text);text-align:left;padding:9px;cursor:pointer}
+.issue-header strong{display:block;margin-top:5px;font-size:10px}
+.issue-context{display:block;color:var(--muted);font-size:9px;margin-top:4px}
+.issue-body{border-top:1px solid var(--border);padding:9px;background:var(--panel-alt)}
+.viewed-mark{display:inline-flex;border:1px solid var(--border);border-radius:999px;padding:2px 6px;color:var(--muted);font-size:8px;font-weight:800}
+.rc2-status-row{margin-top:8px}
+.rc2-status-row button{font-size:9px;padding:5px 7px}
+html[data-theme='dark'] .discipline.related-focus{box-shadow:0 0 0 3px color-mix(in srgb,var(--related-color) 48%,transparent),var(--shadow)!important}
+html[data-theme='dark'] .rc2-common-block{background:color-mix(in srgb,var(--accent) 13%,var(--panel))}
+@media(max-width:850px){.rc2-status-row button{flex:1 1 45%}}

@@ -1,0 +1,66 @@
+{
+  "version": "1.0.0",
+  "archive_name_pattern": "VISUALIZATION_<specialty>_<academic_year>_v<version>.zip",
+  "root_files": [
+    "START.html",
+    "README.md",
+    "НОРМАЛИЗОВАННЫЕ_ДАННЫЕ.json",
+    "ПРИМЕНЁННЫЕ_ПРАВИЛА.json",
+    "РЕЕСТР_ОШИБОК.json",
+    "РЕЕСТР_ИСПРАВЛЕНИЙ.json",
+    "АУДИТ_ИСТОЧНИКОВ.md",
+    "ОТКРЫТЫЕ_ВОПРОСЫ.md",
+    "ПРОФИЛЬ_ПРОГРАММЫ.json",
+    "PACKAGE_MANIFEST.json",
+    "ПРОТОКОЛ_ПРОВЕРКИ.txt"
+  ],
+  "start_html": {
+    "embedded_data": true,
+    "works_without_other_files": true,
+    "internet_required": false,
+    "external_js": false,
+    "external_json": false,
+    "fetch_calls": false,
+    "start_at_zip_root": true
+  },
+  "manifest": {
+    "required": true,
+    "fields": [
+      "package",
+      "version",
+      "created_at",
+      "start_file",
+      "autonomous_start",
+      "files"
+    ],
+    "file_fields": ["name", "size", "sha256"]
+  },
+  "verification": [
+    "ZIP exists and size > 0",
+    "ZIP integrity passes",
+    "START.html at ZIP root",
+    "no absolute or parent paths",
+    "inline JavaScript syntax passes",
+    "all JSON parses",
+    "browser smoke test passes",
+    "light and dark theme smoke tests pass",
+    "group and individual competency filters pass",
+    "discipline focus preserves active filters",
+    "clickable issue navigation passes",
+    "issue status changes pass",
+    "session save and load pass",
+    "snapshot and change-log exports pass",
+    "normal text contrast >= 4.5:1",
+    "UI and large text contrast >= 3:1",
+    "download link points to a real registered artifact or stable Drive file"
+  ],
+  "delivery_policy": {
+    "primary": "verified_chat_artifact_when_supported",
+    "fallback": "stable_google_drive_file_after_successful_upload",
+    "forbidden": [
+      "publishing a sandbox link without physical file verification",
+      "publishing a transient upstream artifact URL as a stable user link",
+      "claiming download availability without status confirmation"
+    ]
+  }
+}

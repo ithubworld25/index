@@ -1,0 +1,87 @@
+{
+  "version": "1.1.0",
+  "functional_core_subject_constants": {
+    "PROFILE": {
+      "type": "object",
+      "required": [
+        "id",
+        "label",
+        "specialty_code",
+        "academic_year",
+        "semesters",
+        "roles",
+        "groups",
+        "validation"
+      ]
+    },
+    "SOURCE_MANIFEST": {
+      "type": "object",
+      "required": ["id", "purpose", "sources"]
+    },
+    "CATALOG": {
+      "type": "array",
+      "item_required": [
+        "id",
+        "code",
+        "name",
+        "group_id",
+        "hue",
+        "saturation"
+      ]
+    },
+    "NODE_DEFS": {
+      "type": "array",
+      "item_required": [
+        "key",
+        "sem",
+        "name",
+        "hours",
+        "roles",
+        "comps",
+        "canonical"
+      ]
+    },
+    "CONTINUATION_DEFS": {
+      "type": "array",
+      "item": "[from_key,to_key]"
+    },
+    "STATIC_ISSUES": {
+      "type": "array",
+      "item_required": [
+        "issue_id",
+        "type",
+        "priority",
+        "rule_id",
+        "short_message",
+        "full_description",
+        "required_action",
+        "role_ids",
+        "semester_ids",
+        "source_refs"
+      ]
+    }
+  },
+  "identifier_rules": {
+    "competency_id": "stable string within specialty",
+    "node_key": "stable realization key within normalized dataset",
+    "issue_id": "deterministic and stable across regeneration when the same issue remains",
+    "column_position_as_id": false
+  },
+  "discipline_realization": {
+    "required": [
+      "role_id",
+      "semester",
+      "name",
+      "hours",
+      "competencies",
+      "canonical_id"
+    ],
+    "optional": [
+      "code",
+      "shared_key",
+      "zero_hours",
+      "physical_education_exception",
+      "source_refs"
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "version": "1.1.0",
+  "scope": "single_specialty",
+  "aliases": [
+    {
+      "source_name": "",
+      "normalized_name": "",
+      "scope": "specialty_only",
+      "status": "confirmed",
+      "reason": ""
+    }
+  ],
+  "shared_realization_exceptions": [
+    {
+      "normalized_name": "",
+      "semester": null,
+      "hours": null,
+      "role_ids": [],
+      "action": "separate|merge",
+      "reason": "",
+      "approved_by": ""
+    }
+  ],
+  "splits": [
+    {
+      "joint_plan_node": "",
+      "matrix_realizations": [],
+      "hours_allocation": {},
+      "status": "confirmed",
+      "reason": ""
+    }
+  ],
+  "merges": [
+    {
+      "source_nodes": [],
+      "target_canonical_id": "",
+      "status": "confirmed",
+      "reason": ""
+    }
+  ],
+  "continuations": [
+    {
+      "from": "",
+      "to": "",
+      "basis": "exact_name|normalized_name|fgos|manual",
+      "status": "confirmed"
+    }
+  ],
+  "validation_exceptions": [
+    {
+      "rule_id": "",
+      "object_id": "",
+      "reason": "",
+      "approved_by": ""
+    }
+  ]
+}

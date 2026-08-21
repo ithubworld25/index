@@ -1,0 +1,88 @@
+{
+  "version": "1.1.0",
+  "archive_name_pattern": "VISUALIZATION_<specialty>_<academic_year>_v<version>.zip",
+  "root_files": [
+    "START.html",
+    "README.md",
+    "ВХОДНОЙ_МАНИФЕСТ.json",
+    "НОРМАЛИЗОВАННЫЕ_ДАННЫЕ.json",
+    "ПРИМЕНЁННЫЕ_ПРАВИЛА.json",
+    "РЕЕСТР_ОШИБОК.json",
+    "РЕЕСТР_ИСПРАВЛЕНИЙ.json",
+    "АУДИТ_ИСТОЧНИКОВ.md",
+    "ОТКРЫТЫЕ_ВОПРОСЫ.md",
+    "ПРОФИЛЬ_ПРОГРАММЫ.json",
+    "СООТВЕТСТВИЕ_ЭТАЛОНУ.json",
+    "PACKAGE_MANIFEST.json",
+    "ПРОТОКОЛ_ПРОВЕРКИ.txt"
+  ],
+  "start_html": {
+    "at_zip_root": true,
+    "embedded_data": true,
+    "works_without_other_files": true,
+    "internet_required": false,
+    "external_js": false,
+    "external_json": false,
+    "fetch_calls": false
+  },
+  "functional_core": {
+    "version": "1.0.0",
+    "hash_verification_required": true,
+    "allowed_subject_data_constants": [
+      "PROFILE",
+      "SOURCE_MANIFEST",
+      "CATALOG",
+      "NODE_DEFS",
+      "CONTINUATION_DEFS",
+      "STATIC_ISSUES"
+    ]
+  },
+  "mandatory_verification": [
+    "functional core hash matches",
+    "ZIP exists and size > 0",
+    "ZIP integrity passes",
+    "START.html at ZIP root",
+    "no absolute or parent paths",
+    "inline JavaScript syntax passes",
+    "all JSON parses",
+    "browser smoke test passes",
+    "light and dark theme smoke tests pass",
+    "multiple competency groups accumulate",
+    "competency-only mode draws no competency lines",
+    "discipline focus preserves active filters",
+    "related disciplines are highlighted and unrelated are dimmed",
+    "one colored line per shared active competency",
+    "issue accordion expands in place",
+    "switching issue synchronizes diagnostic and map",
+    "manual close without comment is blocked",
+    "issue status export/import passes",
+    "semester-level issue context passes",
+    "zero-hour filter passes",
+    "normal text contrast >= 4.5:1",
+    "UI and large text contrast >= 3:1"
+  ],
+  "manifest": {
+    "required": true,
+    "fields": [
+      "package",
+      "version",
+      "created_at",
+      "start_file",
+      "autonomous_start",
+      "files"
+    ],
+    "file_fields": ["name", "size", "sha256"]
+  },
+  "delivery_policy": {
+    "allowed": [
+      "verified registered chat artifact",
+      "stable GitHub Release asset",
+      "stable Google Drive file after confirmed upload"
+    ],
+    "forbidden": [
+      "unverified sandbox path",
+      "expired Actions artifact presented as permanent",
+      "claiming availability without physical verification"
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "contract_id": "trajectory-input-format-contract",
+  "version": "0.9.0-rc1",
+  "strategy": "semantic_anchors_not_fixed_coordinates",
+  "source_families": {
+    "joint_plan": {
+      "role": "only source of map nodes, displayed names, semesters and actual hours",
+      "required_anchors": ["СПО", "ДО", "ДПО", "Индекс", "Дисциплины", "Часы по ФГОС", "Часы очной реализации"],
+      "optional_anchors": ["Часы в неделю", "Пары", "Самостоятельные часы", "Расхождение"],
+      "rules": [
+        "do not bind to absolute cell addresses",
+        "detect semester blocks by header text and local table structure",
+        "preserve zero-hour rows as dim nodes",
+        "practices, projects and GIA become nodes when present in the joint plan"
+      ]
+    },
+    "competency_matrix": {
+      "role": "competency assignments, coefficients and assessment places",
+      "required_anchors": ["Бизнес-роль", "Курс", "Семестр", "Учебный год", "Код дисциплины по ФГОС", "Дисциплины ИТ ХАБ", "Часы (семестр)"],
+      "competency_detection": "columns after identity block are catalog candidates; group metadata comes from headers/profile",
+      "coefficient_rule": "integer 1..4 unless profile explicitly overrides",
+      "rules": [
+        "matrix never creates a map node by itself",
+        "unattached matrix row becomes a mapping issue",
+        "source line and column references must be retained"
+      ]
+    },
+    "fgos_plan": {
+      "role": "normative basis and evidence for continuation links",
+      "required_anchors": ["Индекс", "Наименование", "Семестр"],
+      "rules": [
+        "does not create alternative map nodes",
+        "unmapped FГОС row is not an error by itself",
+        "split/merge and nontrivial continuation require explicit mapping"
+      ]
+    }
+  },
+  "normalization": {
+    "safe": ["trim spaces", "normalize nonbreaking spaces", "case fold", "ё/е normalization", "punctuation spacing"],
+    "automatic_link": ["exact name", "normalized name"],
+    "warning_only": ["approximate name", "same code with materially different name"],
+    "explicit_mapping_required": ["split", "merge", "renaming with semantic change", "nontrivial continuation"]
+  },
+  "identity": {
+    "code_default": "informational_only",
+    "canonical_discipline": "stable logical discipline",
+    "discipline_realization": "role + semester + academic year + plan version",
+    "shared_realization": "same realization used by several roles",
+    "source_trace_required": true
+  },
+  "audit": {
+    "P0": "blocks build until user decision",
+    "P1": "build continues using source priority; issue remains open",
+    "P2": "informational or normalized record",
+    "silent_correction_forbidden": true
+  },
+  "test_fixtures": [
+    "joint plans with different blank-column offsets",
+    "matrix with same semantic headers but moved table",
+    "one-to-many discipline split",
+    "zero-hour internal discipline",
+    "same title across roles with shared realization"
+  ]
+}
